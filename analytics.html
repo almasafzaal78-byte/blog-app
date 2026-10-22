@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Quillo — Analytics</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard-pages.css">
+
+</head>
+
+<body>
+
+
+<nav class="topnav">
+
+    <a href="home.html" class="logo">
+        Quil<span>lo</span>
+    </a>
+
+    <div class="top-links">
+
+        <a href="home.html">
+            Home
+        </a>
+
+        <a href="dashboard.html">
+            Dashboard
+        </a>
+
+        <a href="create-blog.html"
+           class="new-post-btn">
+            + New Post
+        </a>
+
+        <div class="top-avatar"
+             id="top-avatar">
+            A
+        </div>
+
+    </div>
+
+</nav>
+
+
+<div class="dashboard-layout">
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="workspace-sidebar">
+
+        <div class="sidebar-title">
+            WORKSPACE
+        </div>
+
+
+        <div class="sidebar-menu">
+
+            <a href="dashboard.html">
+
+                <span class="sidebar-icon">
+                    ⌂
+                </span>
+
+                Overview
+
+            </a>
+
+
+            <a href="analytics.html"
+               class="active">
+
+                <span class="sidebar-icon">
+                    ◉
+                </span>
+
+                Analytics
+
+            </a>
+
+
+            <a href="profile.html">
+
+                <span class="sidebar-icon">
+                    ○
+                </span>
+
+                Profile
+
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- CONTENT -->
+
+    <main class="dashboard-content">
+
+
+        <div class="page-heading">
+
+            <span class="eyebrow">
+                YOUR PERFORMANCE
+            </span>
+
+            <h1>
+                Analytics
+            </h1>
+
+            <p>
+                Understand how readers interact with your writing.
+            </p>
+
+        </div>
+
+
+        <!-- TOP STATS -->
+
+        <div class="stats-grid">
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    ◎
+                </div>
+
+                <div class="stat-number"
+                     id="analytics-views">
+                    0
+                </div>
+
+                <div class="stat-label">
+                    Total views
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    ✎
+                </div>
+
+                <div class="stat-number"
+                     id="analytics-drafts">
+                    0
+                </div>
+
+                <div class="stat-label">
+                    Drafts
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    ◇
+                </div>
+
+                <div class="stat-number"
+                     id="analytics-posts">
+                    0
+                </div>
+
+                <div class="stat-label">
+                    Published posts
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    ✦
+                </div>
+
+                <div class="stat-number"
+                     id="analytics-average">
+                    0
+                </div>
+
+                <div class="stat-label">
+                    Avg. views / post
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <br>
+
+
+        <!-- CHARTS -->
+
+        <div class="analytics-grid">
+
+
+            <div class="analytics-card">
+
+                <h2>
+                    Views, last 8 weeks
+                </h2>
+
+                <p>
+                    Your estimated reading activity
+                </p>
+
+
+                <div class="bar-chart">
+
+                    <div class="bar"
+                         style="--height: 42%"
+                         data-label="W1">
+                    </div>
+
+                    <div class="bar"
+                         style="--height: 58%"
+                         data-label="W2">
+                    </div>
+
+                    <div class="bar"
+                         style="--height: 47%"
+                         data-label="W3">
+                    </div>
+
+                    <div class="bar"
+                         style="--height: 70%"
+                         data-label="W4">
+                    </div>
+
+                    <div class="bar"
+                         style="--height: 54%"
+                         data-label="W5">
+                    </div>
+
+                    <div class="bar"
+                         style="--height: 77%"
+                         data-label="W6">
+                    </div>
+
+                    <div class="bar"
+                         style="--height: 64%"
+                         data-label="W7">
+                    </div>
+
+                    <div class="bar"
+                         style="--height: 91%"
+                         data-label="W8">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="analytics-card">
+
+                <h2>
+                    Top categories
+                </h2>
+
+                <p>
+                    Based on your published posts
+                </p>
+
+
+                <div class="donut-wrap">
+
+                    <div class="donut"
+                         id="category-donut">
+
+                        <div class="donut-hole">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Legend is generated from your real published posts -->
+                <div class="legend"
+                     id="category-legend">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <br>
+
+
+        <!-- INSIGHT -->
+
+        <div class="analytics-card">
+
+            <h2>
+                ✦ Writing insight
+            </h2>
+
+            <p id="writing-insight"
+               style="font-size:15px;margin-top:12px;line-height:1.7;">
+                Keep publishing consistently. Every post gives your audience
+                another reason to return.
+            </p>
+
+        </div>
+
+
+    </main>
+
+</div>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+
+    const name =
+        localStorage.getItem("userName") || "A";
+
+
+    document.getElementById("top-avatar")
+        .innerText =
+        name.charAt(0).toUpperCase();
+
+
+    const email =
+        localStorage.getItem("userEmail") || "";
+
+
+    const blogs =
+        JSON.parse(
+            localStorage.getItem("blogs") || "[]"
+        );
+
+
+    const mine =
+        blogs.filter(function (blog) {
+
+            return blog.authorEmail === email;
+
+        });
+
+
+    const published =
+        mine.filter(function (blog) {
+
+            return blog.status === "Published";
+
+        });
+
+
+    const drafts =
+        mine.filter(function (blog) {
+
+            return blog.status === "Draft";
+
+        });
+
+
+    const views =
+        published.reduce(function (total, blog) {
+
+            return total +
+                Number(blog.views || 0);
+
+        }, 0);
+
+
+    const average =
+        published.length
+            ? Math.round(views / published.length)
+            : 0;
+
+
+    document.getElementById("analytics-views")
+        .innerText = views;
+
+
+    document.getElementById("analytics-drafts")
+        .innerText = drafts.length;
+
+
+    document.getElementById("analytics-posts")
+        .innerText = published.length;
+
+
+    document.getElementById("analytics-average")
+        .innerText = average;
+
+
+    /* =========================================
+       TOP CATEGORIES — built from real posts
+    ========================================= */
+
+    const palette = ["#315a47", "#c98a3f", "#82a7b3", "#d8c8aa"];
+
+    const donut =
+        document.getElementById("category-donut");
+
+    const legend =
+        document.getElementById("category-legend");
+
+    legend.innerHTML = "";
+
+
+    if (published.length === 0) {
+
+        donut.style.background =
+            "conic-gradient(#e6e0d0 0% 100%)";
+
+        const empty = document.createElement("p");
+
+        empty.innerText = "No published posts yet.";
+
+        empty.style.fontSize = "14px";
+        empty.style.opacity = "0.7";
+        empty.style.textAlign = "center";
+
+        legend.appendChild(empty);
+
+    }
+
+    else {
+
+        const counts = {};
+
+        published.forEach(function (blog) {
+
+            const category =
+                String(blog.category || "General").trim() || "General";
+
+            counts[category] =
+                (counts[category] || 0) + 1;
+
+        });
+
+
+        let entries =
+            Object.keys(counts).map(function (key) {
+
+                return {
+                    name: key,
+                    count: counts[key]
+                };
+
+            });
+
+
+        entries.sort(function (a, b) {
+
+            return b.count - a.count;
+
+        });
+
+
+        /* Show the top 3 categories, group the rest as "Other". */
+
+        if (entries.length > 4) {
+
+            const top = entries.slice(0, 3);
+
+            const otherCount =
+                entries.slice(3).reduce(function (sum, entry) {
+
+                    return sum + entry.count;
+
+                }, 0);
+
+            top.push({
+                name: "Other",
+                count: otherCount
+            });
+
+            entries = top;
+
+        }
+
+
+        let start = 0;
+
+        const stops = [];
+
+
+        entries.forEach(function (entry, index) {
+
+            const color = palette[index % palette.length];
+
+            const share = entry.count / published.length;
+
+            const end = start + share * 100;
+
+            stops.push(
+                color + " " + start.toFixed(2) + "% " + end.toFixed(2) + "%"
+            );
+
+            start = end;
+
+
+            const item = document.createElement("div");
+            item.className = "legend-item";
+
+            const left = document.createElement("div");
+            left.className = "legend-left";
+
+            const dot = document.createElement("span");
+            dot.className = "legend-dot";
+            dot.style.background = color;
+
+            left.appendChild(dot);
+            left.appendChild(document.createTextNode(entry.name));
+
+            const percent = document.createElement("strong");
+            percent.innerText = Math.round(share * 100) + "%";
+
+            item.appendChild(left);
+            item.appendChild(percent);
+
+            legend.appendChild(item);
+
+        });
+
+
+        donut.style.background =
+            "conic-gradient(" + stops.join(", ") + ")";
+
+    }
+
+
+    /* =========================================
+       WRITING INSIGHT
+    ========================================= */
+
+    const insight =
+        document.getElementById("writing-insight");
+
+
+    if (published.length === 0) {
+
+        insight.innerText =
+            "You have not published a post yet. Start writing and your analytics will appear here.";
+
+    }
+
+    else if (views === 0) {
+
+        insight.innerText =
+            "Your posts are live! Once readers start opening them, your view analytics will begin growing.";
+
+    }
+
+    else {
+
+        insight.innerText =
+            "Your writing is getting attention. Keep publishing consistently and experiment with different topics to grow your audience.";
+
+    }
+
+});
+
+</script>
+
+
+</body>
+</html>

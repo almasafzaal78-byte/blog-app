@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quillo — Log in</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div id="splash-screen">
+        <h1>Quillo</h1>
+        <p>Write things worth reading</p>
+    </div>
+
+    <nav class="topnav">
+        <a href="home.html" class="logo">Quil<span>lo</span></a>
+        <ul class="nav-links guest-nav">
+            <li><a href="home.html">Home</a></li>
+            <li><a href="login.html">Log in</a></li>
+            <li><a href="register.html" class="nav-btn-primary">Sign up</a></li>
+        </ul>
+        <ul class="nav-links user-nav" style="display:none;">
+            <li><a href="home.html">Home</a></li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="create-blog.html" class="nav-btn-primary">+ New Post</a></li>
+            <li class="profile-wrapper">
+                <button id="profile-icon" class="profile-icon">U</button>
+                <div id="profile-dropdown" class="profile-dropdown">
+                    <div class="profile-dropdown-head">
+                        <div class="profile-avatar-lg" id="profile-avatar-lg">U</div>
+                        <div>
+                            <strong id="dropdown-name-lg">-</strong>
+                            <span id="dropdown-joined">Member since —</span>
+                        </div>
+                    </div>
+                    <p class="profile-bio" id="dropdown-bio"></p>
+                    <div class="profile-row"><span>Email</span><strong id="dropdown-email">-</strong></div>
+                    <div class="profile-row"><span>Password</span><strong>••••••••</strong></div>
+                    <div class="profile-row"><span>Posts</span><strong id="dropdown-postcount">0</strong></div>
+                    <button type="button" class="edit-profile-btn" id="edit-profile-btn">Edit Profile</button>
+                    <button class="dropdown-logout logout-link">Log out</button>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <div id="edit-profile-modal" class="modal-overlay">
+        <div class="modal-card">
+            <h2>Edit Profile</h2>
+            <form id="edit-profile-form">
+                <div class="avatar-upload-row">
+                    <div class="profile-avatar-lg" id="edit-avatar-preview">U</div>
+                    <input type="file" id="edit-avatar-input" accept="image/*">
+                </div>
+                <label for="edit-name">Full name</label>
+                <input type="text" id="edit-name" required>
+                <label for="edit-email">Email</label>
+                <input type="email" id="edit-email" required>
+                <label for="edit-bio">Bio</label>
+                <input type="text" id="edit-bio" placeholder="A short line about you">
+                <label for="edit-password">New password (optional)</label>
+                <input type="password" id="edit-password" placeholder="Leave blank to keep current">
+                <div class="modal-actions">
+                    <button type="button" class="modal-cancel" id="edit-profile-cancel">Cancel</button>
+                    <button type="submit" class="submit-btn">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <section class="hero-animated hero-band">
+        <div class="bg-slideshow" id="login-bg-slideshow"></div>
+        <div class="hero-animated-content">
+            <h1>Welcome back</h1>
+            <p>Log in to write and manage your posts.</p>
+        </div>
+    </section>
+
+    <div class="auth-wrapper">
+        <div class="card">
+            <h1>Log in to Quillo</h1>
+            <p class="subtitle">Enter your details below.</p>
+            <form id="login-form">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="you@example.com" required>
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password" required>
+                <button type="submit" class="submit-btn">Log in</button>
+            </form>
+            <p class="form-footer-link">Don't have an account? <a href="register.html">Sign up</a></p>
+        </div>
+    </div>
+
+    <footer>© 2026 Quillo. Built as a learning project.</footer>
+
+    <script src="js/script.js"></script>
+    <script>initBgSlideshow("login-bg-slideshow");</script>
+
+</body>
+</html>

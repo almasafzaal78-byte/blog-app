@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Quillo — Profile</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard-pages.css">
+
+    <style>
+
+        /* =====================================================
+           APP NOTIFICATION
+           ===================================================== */
+
+        .app-notification {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            width: 360px;
+            background: #fffdf8;
+            border-left: 5px solid #315443;
+            border-radius: 13px;
+            padding: 16px 18px;
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.18);
+            transform: translateX(430px);
+            opacity: 0;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+            z-index: 99999;
+        }
+
+        .app-notification.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .notification-icon {
+            width: 36px;
+            height: 36px;
+            min-width: 36px;
+            border-radius: 50%;
+            background: #dcebd9;
+            color: #315443;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-content strong {
+            display: block;
+            color: #315443;
+            font-size: 14px;
+            margin-bottom: 3px;
+        }
+
+        .notification-content p {
+            margin: 0;
+            color: #81796b;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .notification-close {
+            border: none;
+            background: transparent;
+            color: #8d8578;
+            font-size: 21px;
+            cursor: pointer;
+            padding: 3px;
+        }
+
+        .notification-close:hover {
+            color: #315443;
+        }
+
+
+        /* =====================================================
+           PROFILE EXTRA
+           ===================================================== */
+
+        .profile-bio {
+            max-width: 520px;
+            line-height: 1.5;
+        }
+
+        .profile-buttons button {
+            transition: all 0.25s ease;
+        }
+
+        .profile-buttons button:hover {
+            transform: translateY(-2px);
+        }
+
+        .profile-stat {
+            cursor: default;
+        }
+
+
+        /* =====================================================
+           MODAL
+           ===================================================== */
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(25, 42, 34, 0.60);
+            z-index: 5000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+            animation: modalFade 0.25s ease;
+        }
+
+        @keyframes modalFade {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal {
+            width: min(520px, 100%);
+            background: #faf6eb;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25);
+            animation: modalUp 0.3s ease;
+        }
+
+        @keyframes modalUp {
+            from {
+                opacity: 0;
+                transform: translateY(25px) scale(0.97);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal h2 {
+            color: #315443;
+            font-family: Georgia, serif;
+            font-size: 27px;
+            margin-bottom: 22px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #756d60;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            border: 1px solid #ddd1b8;
+            background: white;
+            border-radius: 10px;
+            padding: 12px;
+            outline: none;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #315443;
+            box-shadow: 0 0 0 3px rgba(49, 84, 67, 0.08);
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 22px;
+        }
+
+        .modal-actions button {
+            border: none;
+            padding: 11px 18px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .cancel-btn {
+            background: #e8dfcd;
+            color: #5f584d;
+        }
+
+        .save-btn {
+            background: #315443;
+            color: white;
+        }
+
+        @media (max-width: 600px) {
+            .app-notification {
+                width: calc(100% - 30px);
+                right: 15px;
+                top: 15px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     TOP NAVIGATION
+     ===================================================== -->
+
+<nav class="topnav">
+
+    <a href="home.html" class="logo">
+        Quil<span>lo</span>
+    </a>
+
+    <div class="top-links">
+
+        <a href="home.html">
+            Home
+        </a>
+
+        <a href="dashboard.html">
+            Dashboard
+        </a>
+
+        <a href="create-blog.html" class="new-post-btn">
+            + New Post
+        </a>
+
+        <div class="top-avatar" id="top-avatar">
+            A
+        </div>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =====================================================
+     MAIN DASHBOARD
+     ===================================================== -->
+
+<div class="dashboard-layout">
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="workspace-sidebar">
+
+        <div class="sidebar-title">
+            WORKSPACE
+        </div>
+
+        <div class="sidebar-menu">
+
+            <a href="dashboard.html">
+                <span class="sidebar-icon">⌂</span>
+                Overview
+            </a>
+
+            <a href="analytics.html">
+                <span class="sidebar-icon">◉</span>
+                Analytics
+            </a>
+
+            <a href="profile.html" class="active">
+                <span class="sidebar-icon">○</span>
+                Profile
+            </a>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- CONTENT -->
+
+    <main class="dashboard-content">
+
+
+        <!-- PAGE HEADING -->
+
+        <div class="page-heading">
+
+            <span class="eyebrow">
+                YOUR ACCOUNT
+            </span>
+
+            <h1>
+                Profile
+            </h1>
+
+            <p>
+                Manage your personal information and writing identity.
+            </p>
+
+        </div>
+
+
+
+        <!-- PROFILE HERO -->
+
+        <section class="profile-hero">
+
+            <div class="profile-avatar" id="profile-avatar">
+                A
+            </div>
+
+            <div class="profile-main">
+
+                <h2 id="profile-name">
+                    Writer
+                </h2>
+
+                <div class="profile-email" id="profile-email">
+                    -
+                </div>
+
+                <div class="profile-bio" id="profile-bio">
+                    "Writing ideas worth remembering."
+                </div>
+
+                <span class="badge">
+                    ✦ Rising Writer
+                </span>
+
+            </div>
+
+            <div class="profile-buttons">
+
+                <button class="btn-light" onclick="openProfileModal()">
+                    ✎ Edit Profile
+                </button>
+
+                <button class="btn-outline" onclick="openPasswordModal()">
+                    🔒 Change Password
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- PROFILE STATS -->
+
+        <div class="profile-stats">
+
+            <div class="profile-stat">
+                <strong id="profile-posts">0</strong>
+                <span>Total Posts</span>
+            </div>
+
+            <div class="profile-stat">
+                <strong id="profile-views">0</strong>
+                <span>Total Views</span>
+            </div>
+
+            <div class="profile-stat">
+                <strong id="profile-drafts">0</strong>
+                <span>Drafts</span>
+            </div>
+
+            <div class="profile-stat">
+                <strong id="profile-joined">—</strong>
+                <span>Joined</span>
+            </div>
+
+        </div>
+
+
+
+        <!-- INFORMATION CARDS -->
+
+        <div class="profile-grid">
+
+
+            <!-- ACCOUNT INFORMATION -->
+
+            <div class="profile-card">
+
+                <h3>
+                    Account Information
+                </h3>
+
+                <div class="info-row">
+                    <span>Full name</span>
+                    <strong id="info-name">-</strong>
+                </div>
+
+                <div class="info-row">
+                    <span>Email</span>
+                    <strong id="info-email">-</strong>
+                </div>
+
+                <div class="info-row">
+                    <span>Joined</span>
+                    <strong id="info-joined">-</strong>
+                </div>
+
+                <div class="info-row">
+                    <span>Account</span>
+                    <strong>Active</strong>
+                </div>
+
+            </div>
+
+
+
+            <!-- SECURITY -->
+
+            <div class="profile-card">
+
+                <h3>
+                    Security
+                </h3>
+
+                <div class="info-row">
+                    <span>Password</span>
+                    <strong>••••••••••</strong>
+                </div>
+
+                <div class="password-box">
+
+                    <strong>
+                        Keep your account secure
+                    </strong>
+
+                    <p style="margin-top:6px; color:#8c8372; font-size:13px; line-height:1.5;">
+                        You can change your password whenever you need.
+                    </p>
+
+                    <button onclick="openPasswordModal()">
+                        Change Password
+                    </button>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     APP NOTIFICATION
+     ===================================================== -->
+
+<div id="app-notification" class="app-notification">
+
+    <div class="notification-icon" id="notification-icon">
+        ✓
+    </div>
+
+    <div class="notification-content">
+
+        <strong id="notification-title">
+            Success
+        </strong>
+
+        <p id="notification-message">
+            Your changes have been saved.
+        </p>
+
+    </div>
+
+    <button class="notification-close" onclick="hideNotification()">
+        ×
+    </button>
+
+</div>
+
+
+
+<!-- =====================================================
+     EDIT PROFILE MODAL
+     ===================================================== -->
+
+<div class="modal-overlay" id="profile-modal">
+
+    <div class="modal">
+
+        <h2>
+            Edit Profile
+        </h2>
+
+        <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="edit-name" placeholder="Enter your name">
+        </div>
+
+        <div class="form-group">
+            <label>Bio</label>
+            <textarea id="edit-bio" placeholder="Tell readers something about yourself..."></textarea>
+        </div>
+
+        <div class="modal-actions">
+
+            <button class="cancel-btn" onclick="closeModals()">
+                Cancel
+            </button>
+
+            <button class="save-btn" onclick="saveProfile()">
+                Save Changes
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     PASSWORD MODAL
+     ===================================================== -->
+
+<div class="modal-overlay" id="password-modal">
+
+    <div class="modal">
+
+        <h2>
+            Change Password
+        </h2>
+
+        <div class="form-group">
+            <label>Current Password</label>
+            <input type="password" id="old-password" placeholder="Current password">
+        </div>
+
+        <div class="form-group">
+            <label>New Password</label>
+            <input type="password" id="new-password" placeholder="New password">
+        </div>
+
+        <div class="form-group">
+            <label>Confirm New Password</label>
+            <input type="password" id="confirm-password" placeholder="Confirm password">
+        </div>
+
+        <div class="modal-actions">
+
+            <button class="cancel-btn" onclick="closeModals()">
+                Cancel
+            </button>
+
+            <button class="save-btn" onclick="changePassword()">
+                Update Password
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+     ===================================================== -->
+
+<script>
+
+
+/* =====================================================
+   LOAD PROFILE DATA
+   ===================================================== */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const name =
+        localStorage.getItem("userName") || "Guest User";
+
+    const email =
+        localStorage.getItem("userEmail") || "-";
+
+    const bio =
+        localStorage.getItem("userBio") || "Writing ideas worth remembering.";
+
+    const joined =
+        localStorage.getItem("userJoinDate") || "Oct 2026";
+
+    const blogs =
+        JSON.parse(localStorage.getItem("blogs") || "[]");
+
+
+    /* Only the user's own blogs */
+
+    const myBlogs =
+        blogs.filter(function (blog) {
+            return blog.authorEmail === email;
+        });
+
+    const views =
+        myBlogs.reduce(function (total, blog) {
+            return total + Number(blog.views || 0);
+        }, 0);
+
+    const drafts =
+        myBlogs.filter(function (blog) {
+            return blog.status === "Draft";
+        }).length;
+
+    const initial =
+        name.charAt(0).toUpperCase();
+
+
+    /* NAV AVATAR */
+    document.getElementById("top-avatar").innerText = initial;
+
+    /* PROFILE AVATAR */
+    document.getElementById("profile-avatar").innerText = initial;
+
+    /* PROFILE NAME */
+    document.getElementById("profile-name").innerText = name;
+
+    /* EMAIL */
+    document.getElementById("profile-email").innerText = email;
+
+    /* BIO */
+    document.getElementById("profile-bio").innerText = '"' + bio + '"';
+
+    /* STATS */
+    document.getElementById("profile-posts").innerText = myBlogs.length;
+    document.getElementById("profile-views").innerText = views;
+    document.getElementById("profile-drafts").innerText = drafts;
+    document.getElementById("profile-joined").innerText = joined;
+
+    /* ACCOUNT INFORMATION */
+    document.getElementById("info-name").innerText = name;
+    document.getElementById("info-email").innerText = email;
+    document.getElementById("info-joined").innerText = joined;
+
+    /* EDIT FORM VALUES */
+    document.getElementById("edit-name").value = name;
+    document.getElementById("edit-bio").value = bio;
+
+});
+
+
+
+/* =====================================================
+   APP NOTIFICATION
+   ===================================================== */
+
+let notificationTimer;
+
+
+function showNotification(title, message, type = "success") {
+
+    const notification = document.getElementById("app-notification");
+    const titleElement = document.getElementById("notification-title");
+    const messageElement = document.getElementById("notification-message");
+    const icon = document.getElementById("notification-icon");
+
+    titleElement.innerText = title;
+    messageElement.innerText = message;
+
+    if (type === "error") {
+
+        notification.style.borderLeftColor = "#b94a48";
+        icon.style.background = "#f4dddd";
+        icon.style.color = "#a43d3a";
+        icon.innerText = "!";
+
+    }
+
+    else {
+
+        notification.style.borderLeftColor = "#315443";
+        icon.style.background = "#dcebd9";
+        icon.style.color = "#315443";
+        icon.innerText = "✓";
+
+    }
+
+    notification.classList.add("show");
+
+    clearTimeout(notificationTimer);
+
+    notificationTimer = setTimeout(function () {
+        hideNotification();
+    }, 3500);
+
+}
+
+
+function hideNotification() {
+
+    document.getElementById("app-notification").classList.remove("show");
+
+}
+
+
+
+/* =====================================================
+   EDIT PROFILE
+   ===================================================== */
+
+function openProfileModal() {
+
+    document.getElementById("profile-modal").classList.add("show");
+
+}
+
+
+function closeModals() {
+
+    document.querySelectorAll(".modal-overlay").forEach(function (modal) {
+        modal.classList.remove("show");
+    });
+
+}
+
+
+
+/* =====================================================
+   SAVE PROFILE
+   ===================================================== */
+
+function saveProfile() {
+
+    const name =
+        document.getElementById("edit-name").value.trim();
+
+    const bio =
+        document.getElementById("edit-bio").value.trim();
+
+    if (!name) {
+
+        showNotification(
+            "Missing Information",
+            "Please enter your name.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    localStorage.setItem("userName", name);
+    localStorage.setItem("userBio", bio);
+
+    closeModals();
+
+    showNotification(
+        "Profile Updated",
+        "Your profile has been saved successfully."
+    );
+
+    /* Reload after notification so the updated profile appears. */
+
+    setTimeout(function () {
+        location.reload();
+    }, 1200);
+
+}
+
+
+
+/* =====================================================
+   PASSWORD MODAL
+   ===================================================== */
+
+function openPasswordModal() {
+
+    document.getElementById("password-modal").classList.add("show");
+
+}
+
+
+
+/* =====================================================
+   CHANGE PASSWORD
+   ===================================================== */
+
+function changePassword() {
+
+    const oldPassword =
+        document.getElementById("old-password").value;
+
+    const newPassword =
+        document.getElementById("new-password").value;
+
+    const confirmPassword =
+        document.getElementById("confirm-password").value;
+
+    const savedPassword =
+        localStorage.getItem("userPassword") ||
+        localStorage.getItem("password") ||
+        "";
+
+    if (!oldPassword || !newPassword || !confirmPassword) {
+
+        showNotification(
+            "Incomplete Form",
+            "Please fill all password fields.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    if (savedPassword && oldPassword !== savedPassword) {
+
+        showNotification(
+            "Incorrect Password",
+            "Your current password is incorrect.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    if (newPassword.length < 6) {
+
+        showNotification(
+            "Password Too Short",
+            "Password must contain at least 6 characters.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    if (newPassword !== confirmPassword) {
+
+        showNotification(
+            "Passwords Do Not Match",
+            "Please enter the same password twice.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    localStorage.setItem("userPassword", newPassword);
+    localStorage.setItem("password", newPassword);
+
+    closeModals();
+
+    showNotification(
+        "Password Updated",
+        "Your password has been changed successfully."
+    );
+
+    /* Clear fields */
+
+    document.getElementById("old-password").value = "";
+    document.getElementById("new-password").value = "";
+    document.getElementById("confirm-password").value = "";
+
+}
+
+
+
+/* =====================================================
+   CLOSE MODAL WHEN CLICKING OUTSIDE
+   ===================================================== */
+
+document.querySelectorAll(".modal-overlay").forEach(function (modal) {
+
+    modal.addEventListener("click", function (event) {
+
+        if (event.target === modal) {
+
+            closeModals();
+
+        }
+
+    });
+
+});
+
+
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,799 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quillo — Overview</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/dashboard-pages.css">
+<style>
+.top-avatar,
+.profile-icon {
+cursor: pointer;
+}
+.profile-wrapper {
+position: relative;
+}
+.profile-dropdown {
+position: absolute;
+top: calc(100% + 12px);
+right: 0;
+z-index: 1000;
+}
+.profile-dropdown[hidden],
+.modal-overlay[hidden] {
+display: none !important;
+}
+.profile-dropdown.open {
+display: block;
+visibility: visible;
+opacity: 1;
+pointer-events: auto;
+}
+.profile-icon[aria-expanded="true"] {
+outline: 2px solid #789779;
+outline-offset: 3px;
+}
+.action-edit,
+.action-delete {
+cursor: pointer;
+margin-right: 10px;
+}
+.action-edit {
+color: #315443;
+}
+.action-delete {
+color: #a43d3a;
+}
+.posts-table td {
+overflow-wrap: anywhere;
+}
+.modal-overlay {
+position: fixed;
+inset: 0;
+z-index: 2000;
+overflow-y: auto;
+}
+.modal-card {
+max-width: 500px;
+width: calc(100% - 32px);
+margin: 40px auto;
+}
+.modal-card input {
+box-sizing: border-box;
+width: 100%;
+}
+.avatar-upload-row {
+display: flex;
+align-items: center;
+gap: 15px;
+flex-wrap: wrap;
+}
+@media (max-width: 600px) {
+.profile-dropdown {
+position: fixed;
+top: 82px;
+right: 12px;
+left: auto;
+width: 300px;
+max-width: calc(100vw - 24px);
+}
+.table-card {
+overflow-x: auto;
+-webkit-overflow-scrolling: touch;
+}
+.posts-table {
+min-width: 650px;
+}
+.filters {
+display: flex;
+flex-wrap: wrap;
+gap: 10px;
+}
+.filters input,
+.filters select {
+max-width: 100%;
+box-sizing: border-box;
+}
+}
+</style>
+</head>
+<body>
+<nav class="topnav">
+<a href="home.html" class="logo">Quil<span>lo</span></a>
+<ul class="nav-links user-nav">
+<li><a href="home.html">Home</a></li>
+<li><a href="dashboard.html">Dashboard</a></li>
+<li>
+<a href="create-blog.html" class="nav-btn-primary">+ New Post</a>
+</li>
+<li class="profile-wrapper">
+<button
+id="profile-icon"
+class="profile-icon"
+type="button"
+aria-label="Open profile menu"
+aria-expanded="false"
+aria-controls="profile-dropdown">
+A
+</button>
+<div id="profile-dropdown" class="profile-dropdown" hidden>
+<div class="profile-dropdown-head">
+<div class="profile-avatar-lg" id="profile-avatar-lg">A</div>
+<div>
+<strong id="dropdown-name-lg">Your Name</strong>
+<span id="dropdown-joined">Member since —</span>
+</div>
+</div>
+<p class="profile-bio" id="dropdown-bio">
+Writing ideas worth remembering.
+</p>
+<div class="profile-row">
+<span>Email</span>
+<strong id="dropdown-email">Not provided</strong>
+</div>
+<div class="profile-row">
+<span>Password</span>
+<strong>••••••••</strong>
+</div>
+<div class="profile-row">
+<span>Posts</span>
+<strong id="dropdown-postcount">0</strong>
+</div>
+<button
+type="button"
+class="edit-profile-btn"
+id="edit-profile-btn">
+Edit Profile
+</button>
+<button
+type="button"
+class="dropdown-logout logout-link"
+id="profile-logout">
+Log out
+</button>
+</div>
+</li>
+</ul>
+</nav>
+
+<!-- EDIT PROFILE MODAL -->
+<div id="edit-profile-modal" class="modal-overlay" hidden>
+<div class="modal-card">
+<h2>Edit Profile</h2>
+<form id="edit-profile-form">
+<div class="avatar-upload-row">
+<div class="profile-avatar-lg" id="edit-avatar-preview">A</div>
+<input type="file" id="edit-avatar-input" accept="image/*">
+</div>
+<label for="edit-name">Full name</label>
+<input type="text" id="edit-name" required>
+<label for="edit-email">Email</label>
+<input type="email" id="edit-email" required>
+<label for="edit-bio">Bio</label>
+<input
+type="text"
+id="edit-bio"
+placeholder="A short line about you">
+<label for="edit-password">New password (optional)</label>
+<input
+type="password"
+id="edit-password"
+placeholder="Leave blank to keep current"
+autocomplete="new-password">
+<div class="modal-actions">
+<button
+type="button"
+class="modal-cancel"
+id="edit-profile-cancel">
+Cancel
+</button>
+<button type="submit" class="submit-btn">
+Save changes
+</button>
+</div>
+</form>
+</div>
+</div>
+
+<div class="dashboard-layout">
+<aside class="workspace-sidebar">
+<div class="sidebar-title">WORKSPACE</div>
+<div class="sidebar-menu">
+<a href="dashboard.html" class="active">
+<span class="sidebar-icon">⌂</span>
+Overview
+</a>
+<a href="analytics.html">
+<span class="sidebar-icon">◉</span>
+Analytics
+</a>
+<a href="profile.html">
+<span class="sidebar-icon">○</span>
+Profile
+</a>
+</div>
+</aside>
+
+<main class="dashboard-content">
+<div class="page-heading">
+<span class="eyebrow">YOUR WRITING SPACE</span>
+<h1>Overview</h1>
+<p>A quick look at your writing activity.</p>
+</div>
+
+<div class="stats-grid">
+<div class="stat-card">
+<div class="stat-icon">◷</div>
+<div class="stat-number" id="read-time">0m</div>
+<div class="stat-label">Avg. read time</div>
+</div>
+<div class="stat-card">
+<div class="stat-icon">◆</div>
+<div class="stat-number" id="published-count">0</div>
+<div class="stat-label">Published posts</div>
+</div>
+<div class="stat-card">
+<div class="stat-icon">✎</div>
+<div class="stat-number" id="draft-count">0</div>
+<div class="stat-label">Drafts</div>
+</div>
+<div class="stat-card">
+<div class="stat-icon">◎</div>
+<div class="stat-number" id="views-count">0</div>
+<div class="stat-label">Total views</div>
+</div>
+</div>
+
+<div class="filters">
+<input
+type="text"
+id="search-post"
+placeholder="Search by title..."
+aria-label="Search posts by title">
+<select id="status-filter" aria-label="Filter by status">
+<option value="all">All Status</option>
+<option value="Published">Published</option>
+<option value="Draft">Draft</option>
+</select>
+</div>
+
+<div class="table-card">
+<table class="posts-table">
+<thead>
+<tr>
+<th>TITLE</th>
+<th>STATUS</th>
+<th>DATE</th>
+<th>VIEWS</th>
+<th>ACTIONS</th>
+</tr>
+</thead>
+<tbody id="posts-body"></tbody>
+</table>
+</div>
+</main>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const $ = id => document.getElementById(id);
+
+    /* =====================================
+       PROFILE DROPDOWN
+    ===================================== */
+
+    const avatar = $("profile-icon");
+    const dropdown = $("profile-dropdown");
+
+    function getUserData() {
+        let user = {};
+
+        try {
+            user = JSON.parse(localStorage.getItem("user") || "{}");
+        } catch (error) {
+            user = {};
+        }
+
+        const name =
+            localStorage.getItem("username") ||
+            localStorage.getItem("userName") ||
+            user.name ||
+            user.fullName ||
+            "A";
+
+        const email =
+            localStorage.getItem("userEmail") ||
+            user.email ||
+            "Not provided";
+
+        const bio =
+            localStorage.getItem("userBio") ||
+            user.bio ||
+            "Writing ideas worth remembering.";
+
+        const joined =
+            localStorage.getItem("memberSince") ||
+            user.createdAt ||
+            user.joined ||
+            "";
+
+        return { name, email, bio, joined, user };
+    }
+
+    function setAvatarImage(element, image, initial) {
+        element.style.backgroundImage = "";
+        element.style.backgroundSize = "";
+        element.style.backgroundPosition = "";
+        element.textContent = initial;
+
+        if (image) {
+            element.style.backgroundImage = 'url("' + image + '")';
+            element.style.backgroundSize = "cover";
+            element.style.backgroundPosition = "center";
+            element.textContent = "";
+        }
+    }
+
+    function loadProfileDropdown() {
+        const data = getUserData();
+        const initial = data.name.charAt(0).toUpperCase() || "A";
+
+        avatar.textContent = initial;
+        $("dropdown-name-lg").textContent = data.name;
+        $("dropdown-email").textContent = data.email;
+        $("dropdown-bio").textContent = data.bio;
+
+        let posts = [];
+
+        try {
+            const saved = JSON.parse(localStorage.getItem("blogs") || "[]");
+            posts = Array.isArray(saved) ? saved : [];
+        } catch (error) {
+            posts = [];
+        }
+
+        const currentEmail = localStorage.getItem("userEmail") || "";
+        const hasAuthorInformation =
+            posts.some(post => Boolean(post.authorEmail));
+
+        if (hasAuthorInformation && currentEmail) {
+            posts = posts.filter(post => post.authorEmail === currentEmail);
+        }
+
+        $("dropdown-postcount").textContent = posts.length;
+
+        if (data.joined) {
+            const date = new Date(data.joined);
+
+            $("dropdown-joined").textContent =
+                !Number.isNaN(date.getTime())
+                    ? "Member since " + date.toLocaleDateString("en", {
+                        month: "short",
+                        year: "numeric"
+                    })
+                    : "Member since " + data.joined;
+        } else {
+            $("dropdown-joined").textContent = "Quillo member";
+        }
+
+        $("edit-name").value = data.name === "A" ? "" : data.name;
+        $("edit-email").value =
+            data.email === "Not provided" ? "" : data.email;
+        $("edit-bio").value =
+            data.bio === "Writing ideas worth remembering." ? "" : data.bio;
+
+        const avatarImage =
+            localStorage.getItem("userAvatar") ||
+            data.user.avatar ||
+            "";
+
+        setAvatarImage($("profile-avatar-lg"), avatarImage, initial);
+        setAvatarImage($("edit-avatar-preview"), avatarImage, initial);
+    }
+
+    /*
+      Dropdown visibility is controlled in one place.
+      Both the hidden attribute and open class stay synchronized.
+    */
+    function setDropdownOpen(open) {
+        dropdown.hidden = !open;
+        dropdown.classList.toggle("open", open);
+        dropdown.style.display = open ? "block" : "none";
+
+        avatar.setAttribute("aria-expanded", String(open));
+        avatar.setAttribute(
+            "aria-label",
+            open ? "Close profile menu" : "Open profile menu"
+        );
+    }
+
+    avatar.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+
+        setDropdownOpen(dropdown.hidden);
+    });
+
+    dropdown.addEventListener("click", function (event) {
+        event.stopPropagation();
+    });
+
+    document.addEventListener("click", function (event) {
+        if (
+            !dropdown.hidden &&
+            !dropdown.contains(event.target) &&
+            !avatar.contains(event.target)
+        ) {
+            setDropdownOpen(false);
+        }
+    });
+
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+            setDropdownOpen(false);
+        }
+    });
+
+    loadProfileDropdown();
+
+    /* =====================================
+       EDIT PROFILE MODAL
+    ===================================== */
+
+    const modal = $("edit-profile-modal");
+    let newAvatarData = "";
+
+    $("edit-profile-btn").addEventListener("click", function (event) {
+        event.stopPropagation();
+        setDropdownOpen(false);
+        loadProfileDropdown();
+        modal.hidden = false;
+    });
+
+    $("edit-profile-cancel").addEventListener("click", function () {
+        modal.hidden = true;
+        newAvatarData = "";
+        $("edit-avatar-input").value = "";
+    });
+
+    modal.addEventListener("click", function (event) {
+        if (event.target === modal) {
+            modal.hidden = true;
+            newAvatarData = "";
+            $("edit-avatar-input").value = "";
+        }
+    });
+
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && !modal.hidden) {
+            modal.hidden = true;
+            newAvatarData = "";
+            $("edit-avatar-input").value = "";
+        }
+    });
+
+    $("edit-avatar-input").addEventListener("change", function () {
+        const file = this.files[0];
+
+        if (!file) return;
+
+        if (!file.type.startsWith("image/")) {
+            alert("Please choose an image file.");
+            this.value = "";
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = function () {
+            newAvatarData = reader.result;
+
+            setAvatarImage(
+                $("edit-avatar-preview"),
+                newAvatarData,
+                $("edit-name").value.trim().charAt(0).toUpperCase() || "A"
+            );
+        };
+
+        reader.onerror = function () {
+            alert("Unable to read this image. Please try another image.");
+        };
+
+        reader.readAsDataURL(file);
+    });
+
+    $("edit-name").addEventListener("input", function () {
+        if (!newAvatarData) {
+            const initial = this.value.trim().charAt(0).toUpperCase() || "A";
+            $("edit-avatar-preview").textContent = initial;
+        }
+    });
+
+    $("edit-profile-form").addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const name = $("edit-name").value.trim();
+        const email = $("edit-email").value.trim();
+        const bio = $("edit-bio").value.trim();
+        const password = $("edit-password").value;
+
+        if (!name || !email) {
+            alert("Please enter your name and email.");
+            return;
+        }
+
+        let user = {};
+
+        try {
+            user = JSON.parse(localStorage.getItem("user") || "{}");
+        } catch (error) {
+            user = {};
+        }
+
+        localStorage.setItem("username", name);
+        localStorage.setItem("userName", name);
+        localStorage.setItem("userEmail", email);
+        localStorage.setItem("userBio", bio);
+
+        user.name = name;
+        user.fullName = name;
+        user.email = email;
+        user.bio = bio;
+
+        if (password) {
+            /*
+             * Frontend learning project only.
+             * Never store real passwords in localStorage in production.
+             */
+            user.password = password;
+        }
+
+        if (newAvatarData) {
+            try {
+                localStorage.setItem("userAvatar", newAvatarData);
+                user.avatar = newAvatarData;
+            } catch (error) {
+                alert(
+                    "The image could not be saved. Please choose a smaller image."
+                );
+                return;
+            }
+        }
+
+        try {
+            localStorage.setItem("user", JSON.stringify(user));
+        } catch (error) {
+            alert("Unable to save your profile. Please try again.");
+            return;
+        }
+
+        $("edit-password").value = "";
+        $("edit-avatar-input").value = "";
+        newAvatarData = "";
+
+        modal.hidden = true;
+        loadProfileDropdown();
+
+        alert("Profile updated successfully.");
+    });
+
+    /* =====================================
+       LOG OUT
+    ===================================== */
+
+    $("profile-logout").addEventListener("click", function (event) {
+        event.stopPropagation();
+
+        if (!confirm("Are you sure you want to log out?")) {
+            return;
+        }
+
+        [
+            "username",
+            "userName",
+            "userEmail",
+            "loggedIn",
+            "isLoggedIn",
+            "currentUser"
+        ].forEach(function (key) {
+            localStorage.removeItem(key);
+        });
+
+        window.location.href = "home.html";
+    });
+
+    /* =====================================
+       DASHBOARD POSTS AND STATISTICS
+    ===================================== */
+
+    let blogs = [];
+
+    try {
+        const savedBlogs = JSON.parse(localStorage.getItem("blogs") || "[]");
+        blogs = Array.isArray(savedBlogs) ? savedBlogs : [];
+    } catch (error) {
+        blogs = [];
+    }
+
+    const currentEmail = localStorage.getItem("userEmail") || "";
+    const hasAuthorInformation =
+        blogs.some(blog => Boolean(blog.authorEmail));
+
+    const myBlogs = hasAuthorInformation && currentEmail
+        ? blogs.filter(blog => blog.authorEmail === currentEmail)
+        : blogs;
+
+    function getStatus(blog) {
+        return String(blog.status || "Draft").toLowerCase() === "published"
+            ? "Published"
+            : "Draft";
+    }
+
+    const published = myBlogs.filter(
+        blog => getStatus(blog) === "Published"
+    );
+
+    const drafts = myBlogs.filter(
+        blog => getStatus(blog) === "Draft"
+    );
+
+    const totalViews = published.reduce(function (total, blog) {
+        return total + Number(blog.views || 0);
+    }, 0);
+
+    $("published-count").textContent = published.length;
+    $("draft-count").textContent = drafts.length;
+    $("views-count").textContent = totalViews;
+
+    let totalWords = 0;
+
+    myBlogs.forEach(function (blog) {
+        const text = (blog.content || "").replace(/<[^>]*>/g, " ");
+        const words = text.trim().split(/\s+/).filter(Boolean);
+        totalWords += words.length;
+    });
+
+    const averageMinutes = myBlogs.length
+        ? Math.max(1, Math.round(totalWords / myBlogs.length / 200))
+        : 0;
+
+    $("read-time").textContent = averageMinutes + "m";
+
+    const postsBody = $("posts-body");
+
+    function renderPosts(list) {
+        postsBody.replaceChildren();
+
+        if (list.length === 0) {
+            const row = document.createElement("tr");
+            const cell = document.createElement("td");
+
+            cell.colSpan = 5;
+            cell.style.textAlign = "center";
+            cell.style.padding = "35px";
+            cell.textContent = "No posts found.";
+
+            row.appendChild(cell);
+            postsBody.appendChild(row);
+            return;
+        }
+
+        list.forEach(function (blog) {
+            const row = document.createElement("tr");
+
+            const titleCell = document.createElement("td");
+            titleCell.className = "post-title";
+            titleCell.textContent = blog.title || "Untitled";
+            row.appendChild(titleCell);
+
+            const statusCell = document.createElement("td");
+            const statusBadge = document.createElement("span");
+            const status = getStatus(blog);
+
+            statusBadge.className = "status " + status.toLowerCase();
+            statusBadge.textContent = status;
+            statusCell.appendChild(statusBadge);
+            row.appendChild(statusCell);
+
+            const dateCell = document.createElement("td");
+            const dateValue =
+                blog.updatedAt || blog.date || blog.createdAt;
+
+            if (dateValue) {
+                const date = new Date(dateValue);
+
+                dateCell.textContent = Number.isNaN(date.getTime())
+                    ? String(dateValue)
+                    : date.toLocaleDateString();
+            } else {
+                dateCell.textContent = "—";
+            }
+
+            row.appendChild(dateCell);
+
+            const viewsCell = document.createElement("td");
+            viewsCell.textContent = Number(blog.views || 0);
+            row.appendChild(viewsCell);
+
+            const actionsCell = document.createElement("td");
+
+            const editLink = document.createElement("a");
+            editLink.className = "action-edit";
+            editLink.href =
+                "create-blog.html?id=" + encodeURIComponent(blog.id);
+            editLink.textContent = "Edit";
+
+            const deleteButton = document.createElement("button");
+            deleteButton.type = "button";
+            deleteButton.className = "action-delete";
+            deleteButton.textContent = "Delete";
+
+            deleteButton.addEventListener("click", function () {
+                deletePost(blog.id);
+            });
+
+            actionsCell.appendChild(editLink);
+            actionsCell.appendChild(deleteButton);
+            row.appendChild(actionsCell);
+            postsBody.appendChild(row);
+        });
+    }
+
+    function filterPosts() {
+        const search = $("search-post").value.trim().toLowerCase();
+        const selectedStatus = $("status-filter").value;
+
+        const filtered = myBlogs.filter(function (blog) {
+            const matchesSearch =
+                (blog.title || "").toLowerCase().includes(search);
+
+            const matchesStatus =
+                selectedStatus === "all" ||
+                getStatus(blog) === selectedStatus;
+
+            return matchesSearch && matchesStatus;
+        });
+
+        renderPosts(filtered);
+    }
+
+    $("search-post").addEventListener("input", filterPosts);
+    $("status-filter").addEventListener("change", filterPosts);
+
+    renderPosts(myBlogs);
+});
+
+/* =====================================
+   DELETE POST
+===================================== */
+
+function deletePost(id) {
+    if (!confirm("Are you sure you want to delete this post?")) {
+        return;
+    }
+
+    let blogs = [];
+
+    try {
+        blogs = JSON.parse(localStorage.getItem("blogs") || "[]");
+
+        if (!Array.isArray(blogs)) {
+            blogs = [];
+        }
+    } catch (error) {
+        blogs = [];
+    }
+
+    blogs = blogs.filter(function (blog) {
+        return String(blog.id) !== String(id);
+    });
+
+    localStorage.setItem("blogs", JSON.stringify(blogs));
+    window.location.reload();
+}
+</script>
+</body>
+</html>

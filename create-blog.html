@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quillo — New Post</title>
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        /* =========================================
+           QUILLO NEW POST — PAGE-SPECIFIC DESIGN
+           Existing shared styles remain untouched.
+        ========================================== */
+
+        .np-page {
+            --np-green: #304d3d;
+            --np-dark: #18372b;
+            --np-sage: #dce4d3;
+            --np-cream: #f5f0e3;
+            --np-paper: #fffdf8;
+            --np-gold: #c8944d;
+            --np-muted: #738078;
+            min-height: calc(100vh - 75px);
+            padding: 36px 24px 30px;
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+            background:
+                radial-gradient(ellipse at 20% 20%, rgba(198, 211, 188, .72), transparent 38%),
+                radial-gradient(ellipse at 85% 75%, rgba(224, 207, 169, .52), transparent 38%),
+                linear-gradient(125deg, #f7f2e7, #e5e8d8 53%, #f6efdf);
+            color: #26382e;
+            font-family: inherit;
+        }
+
+        /* FIX: author CSS (display:block / flex) was overriding the
+           HTML "hidden" attribute, so hidden elements were still visible
+           (broken preview image, "Remove image" link). */
+        .np-page [hidden] {
+            display: none !important;
+        }
+
+        .np-page::before,
+        .np-page::after {
+            content: "";
+            position: absolute;
+            z-index: -1;
+            pointer-events: none;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,.32);
+        }
+
+        .np-page::before {
+            width: 120%;
+            height: 380px;
+            top: 110px;
+            left: -10%;
+            transform: rotate(-8deg);
+            background: rgba(255,255,255,.10);
+        }
+
+        .np-page::after {
+            width: 110%;
+            height: 300px;
+            bottom: 5px;
+            left: -5%;
+            transform: rotate(7deg);
+            background: rgba(255,255,255,.08);
+        }
+
+        .np-decoration {
+            position: absolute;
+            z-index: -1;
+            font-family: Georgia, serif;
+            font-style: italic;
+            font-weight: bold;
+            color: rgba(73, 105, 77, .30);
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .np-decoration.d1 { top: 75px; left: 3%; font-size: 66px; }
+        .np-decoration.d2 { top: 110px; right: 14%; font-size: 54px; color: rgba(190,137,64,.40); }
+        .np-decoration.d3 { bottom: 90px; left: 5%; font-size: 55px; }
+        .np-decoration.d4 { top: 40%; right: 4%; font-size: 58px; color: rgba(190,137,64,.42); }
+
+        .np-container {
+            width: min(1220px, 100%);
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .np-heading {
+            margin-bottom: 28px;
+        }
+
+        .np-eyebrow {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            color: var(--np-green);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .np-eyebrow::before {
+            content: "";
+            width: 28px;
+            height: 2px;
+            background: var(--np-gold);
+        }
+
+        .np-heading h1 {
+            margin: 0 0 9px;
+            color: #1d3025;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(30px, 4vw, 43px);
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -.8px;
+        }
+
+        .np-heading p {
+            margin: 0;
+            max-width: 650px;
+            color: #68786f;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        .np-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.55fr) minmax(300px, .9fr);
+            align-items: stretch;
+            gap: 18px;
+        }
+
+        .np-panel {
+            min-width: 0;
+            padding: 26px;
+            border: 1px solid rgba(255,255,255,.85);
+            border-radius: 17px;
+            background: rgba(255,253,248,.91);
+            box-shadow: 0 14px 38px rgba(56, 67, 48, .10);
+            backdrop-filter: blur(8px);
+        }
+
+        .np-field {
+            min-width: 0;
+            margin-bottom: 18px;
+        }
+
+        .np-field label,
+        .np-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #34473b;
+            font-size: 13px;
+            font-weight: 750;
+        }
+
+        .np-required {
+            color: #b96b3c;
+        }
+
+        .np-page input[type="text"],
+        .np-page input[type="url"],
+        .np-page select {
+            width: 100%;
+            min-width: 0;
+            height: 45px;
+            padding: 0 13px;
+            border: 1px solid #e3dfd1;
+            border-radius: 9px;
+            outline: none;
+            background: #fffdf8;
+            color: #2f4035;
+            font: inherit;
+            font-size: 14px;
+            box-sizing: border-box;
+            transition: border-color .2s, box-shadow .2s;
+        }
+
+        .np-page input:focus,
+        .np-page select:focus {
+            border-color: #799783;
+            box-shadow: 0 0 0 3px rgba(91, 130, 101, .12);
+        }
+
+        .np-page input::placeholder {
+            color: #9a9d93;
+        }
+
+        .np-two-fields {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        /* Featured image */
+
+        .np-upload {
+            min-height: 112px;
+            padding: 18px;
+            border: 1.5px dashed #a9c0ab;
+            border-radius: 10px;
+            background: #f7f8f1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            text-align: center;
+            cursor: pointer;
+            transition: background .2s, border-color .2s;
+            box-sizing: border-box;
+        }
+
+        .np-upload:hover,
+        .np-upload.dragging {
+            background: #edf3e8;
+            border-color: var(--np-green);
+        }
+
+        .np-upload svg {
+            width: 27px;
+            height: 27px;
+            color: #52745d;
+        }
+
+        .np-upload strong {
+            color: #536c5b;
+            font-size: 13px;
+            font-weight: 650;
+        }
+
+        .np-upload small {
+            color: #8a958b;
+            font-size: 11px;
+        }
+
+        .np-file-input {
+            display: none !important;
+        }
+
+        .np-image-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 9px;
+            color: #66796a;
+            font-size: 12px;
+            overflow-wrap: anywhere;
+        }
+
+        .np-image-status button {
+            border: 0;
+            background: transparent;
+            color: #a04f3c;
+            font: inherit;
+            cursor: pointer;
+        }
+
+        .np-url-toggle {
+            margin-top: 9px;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            color: #55755f;
+            font-size: 12px;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .np-url-wrap {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .np-url-wrap.visible {
+            display: block;
+        }
+
+        /* Rich text editor */
+
+        .np-editor {
+            overflow: hidden;
+            border: 1px solid #e3dfd5;
+            border-radius: 10px;
+            background: #fff;
+            transition: border-color .2s, box-shadow .2s;
+        }
+
+        .np-editor:focus-within {
+            border-color: #9db29f;
+            box-shadow: 0 0 0 3px rgba(91, 130, 101, .09);
+        }
+
+        .np-toolbar {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 3px;
+            padding: 8px 9px;
+            border-bottom: 1px solid #ebe7dc;
+            background: #fbfaf5;
+        }
+
+        .np-tool {
+            width: 31px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            background: transparent;
+            color: #34453a;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background .15s, border-color .15s;
+        }
+
+        .np-tool:hover,
+        .np-tool.active {
+            border-color: #d5dfd3;
+            background: #e8eee3;
+        }
+
+        .np-tool strong { font-size: 16px; }
+        .np-tool em { font-family: Georgia, serif; font-size: 16px; }
+        .np-tool u { font-size: 15px; }
+
+        .np-toolbar-divider {
+            width: 1px;
+            height: 21px;
+            margin: 0 4px;
+            background: #e6e1d6;
+        }
+
+        .np-toolbar select {
+            width: auto;
+            height: 30px;
+            padding: 0 6px;
+            border: 0;
+            background: transparent;
+            font-size: 12px;
+        }
+
+        .np-editor-content {
+            min-height: 170px;
+            max-height: 420px;
+            overflow-y: auto;
+            padding: 15px;
+            outline: none;
+            color: #34443a;
+            font-size: 14px;
+            line-height: 1.8;
+            overflow-wrap: anywhere;
+        }
+
+        .np-editor-content:empty::before {
+            content: attr(data-placeholder);
+            color: #a2a49c;
+            pointer-events: none;
+        }
+
+        .np-editor-content p:first-child { margin-top: 0; }
+        .np-editor-content p:last-child { margin-bottom: 0; }
+        .np-editor-content a { color: #456e53; }
+        .np-editor-content img { max-width: 100%; height: auto; }
+
+        .np-editor-content h2,
+        .np-editor-content h3 {
+            color: #263b2d;
+            font-family: Georgia, serif;
+        }
+
+        /* Editor footer and buttons */
+
+        .np-editor-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .np-save-note {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: #718076;
+            font-size: 11px;
+        }
+
+        .np-save-note svg {
+            width: 17px;
+            height: 17px;
+            flex-shrink: 0;
+            color: #63856c;
+        }
+
+        .np-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .np-button {
+            min-height: 41px;
+            padding: 0 18px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border-radius: 8px;
+            font: inherit;
+            font-size: 13px;
+            font-weight: 750;
+            text-decoration: none;
+            cursor: pointer;
+            transition: transform .15s, background .15s, box-shadow .15s;
+        }
+
+        .np-button:hover {
+            transform: translateY(-1px);
+        }
+
+        .np-button-cancel {
+            border: 1px solid #668b70;
+            background: transparent;
+            color: #41684d;
+        }
+
+        .np-button-cancel:hover {
+            background: #eef2e9;
+        }
+
+        .np-button-publish {
+            border: 1px solid var(--np-dark);
+            background: linear-gradient(135deg, #315640, #193a2c);
+            color: white;
+            box-shadow: 0 4px 10px rgba(28, 58, 42, .13);
+        }
+
+        .np-button-publish:hover {
+            box-shadow: 0 6px 15px rgba(28, 58, 42, .20);
+        }
+
+        .np-button svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Live preview */
+
+        .np-preview-panel {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .np-preview-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .np-preview-heading h2 {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin: 0;
+            color: #263b2e;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+        .np-preview-heading svg {
+            width: 18px;
+            height: 18px;
+            color: #687a55;
+        }
+
+        .np-preview-pill {
+            padding: 5px 9px;
+            border: 1px solid #e0e1d3;
+            border-radius: 20px;
+            background: #f8f7ef;
+            color: #617263;
+            font-size: 10px;
+            white-space: nowrap;
+        }
+
+        .np-preview-card {
+            min-width: 0;
+            overflow: hidden;
+            flex: 1;
+            border: 1px solid #efecdf;
+            border-radius: 12px;
+            background: #fffdf8;
+        }
+
+        .np-preview-image {
+            width: 100%;
+            height: 190px;
+            display: block;
+            object-fit: cover;
+            background:
+                radial-gradient(circle at 75% 25%, rgba(183, 144, 87, .35), transparent 22%),
+                linear-gradient(135deg, #d8ddcc, #ede1c8);
+        }
+
+        .np-preview-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 8px;
+            color: #71856e;
+        }
+
+        .np-preview-placeholder svg {
+            width: 38px;
+            height: 38px;
+            opacity: .75;
+        }
+
+        .np-preview-placeholder span {
+            font-family: Georgia, serif;
+            font-size: 16px;
+            font-style: italic;
+        }
+
+        .np-preview-body {
+            padding: 19px 18px 17px;
+        }
+
+        .np-preview-category {
+            display: inline-block;
+            max-width: 100%;
+            margin-bottom: 10px;
+            padding: 5px 11px;
+            overflow: hidden;
+            border-radius: 20px;
+            background: #e4eee2;
+            color: #43674c;
+            font-size: 10px;
+            font-weight: 800;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .np-preview-title {
+            margin: 0 0 12px;
+            color: #20362a;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(21px, 2.2vw, 28px);
+            line-height: 1.3;
+            overflow-wrap: anywhere;
+        }
+
+        .np-preview-meta {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 13px;
+            margin-bottom: 16px;
+            color: #78847b;
+            font-size: 11px;
+        }
+
+        .np-meta-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .np-meta-item svg {
+            width: 15px;
+            height: 15px;
+            flex-shrink: 0;
+        }
+
+        .np-preview-excerpt {
+            min-height: 80px;
+            margin: 0;
+            color: #718078;
+            font-size: 13px;
+            line-height: 1.75;
+            overflow-wrap: anywhere;
+        }
+
+        .np-preview-author {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 18px;
+            padding-top: 16px;
+            border-top: 1px solid #ece8dc;
+            color: #78847a;
+            font-size: 12px;
+        }
+
+        .np-author-avatar {
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            overflow: hidden;
+            border-radius: 50%;
+            background: #2d4c39;
+            color: white;
+            font-weight: 750;
+        }
+
+        .np-page-footer {
+            margin-top: 30px;
+            color: #92978b;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .np-page-footer span {
+            color: #68776a;
+        }
+
+        @media (max-width: 900px) {
+            .np-layout {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            .np-preview-panel {
+                min-height: auto;
+            }
+
+            .np-preview-image {
+                height: 230px;
+            }
+
+            .np-preview-title {
+                font-size: 26px;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .np-page {
+                padding: 25px 13px;
+            }
+
+            .np-heading {
+                margin-bottom: 20px;
+            }
+
+            .np-heading h1 {
+                font-size: 31px;
+            }
+
+            .np-panel {
+                padding: 17px;
+                border-radius: 13px;
+            }
+
+            .np-two-fields {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .np-editor-content {
+                min-height: 160px;
+            }
+
+            .np-editor-footer {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .np-actions {
+                width: 100%;
+            }
+
+            .np-actions .np-button {
+                flex: 1;
+                padding: 0 10px;
+            }
+
+            .np-toolbar {
+                gap: 1px;
+                padding: 7px 5px;
+            }
+
+            .np-tool {
+                width: 29px;
+            }
+
+            .np-toolbar-divider {
+                margin: 0 2px;
+            }
+
+            .np-decoration {
+                opacity: .5;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- EXISTING NAVIGATION -->
+    <nav class="topnav">
+        <a href="home.html" class="logo">Quil<span>lo</span></a>
+
+        <ul class="nav-links guest-nav" style="display:none;">
+            <li><a href="home.html" class="nav-item">Home</a></li>
+            <li><a href="login.html" class="nav-item">Log in</a></li>
+            <li><a href="register.html" class="nav-btn-primary">Sign up</a></li>
+        </ul>
+
+        <ul class="nav-links user-nav">
+            <li><a href="home.html" class="nav-item">Home</a></li>
+            <li><a href="dashboard.html" class="nav-item">Dashboard</a></li>
+            <li><a href="create-blog.html" class="nav-btn-primary nav-item">+ New Post</a></li>
+            <li class="profile-wrapper">
+                <button id="profile-icon" class="profile-icon" type="button">U</button>
+
+                <div id="profile-dropdown" class="profile-dropdown">
+                    <div class="profile-dropdown-head">
+                        <div class="profile-avatar-lg" id="profile-avatar-lg">U</div>
+                        <div>
+                            <strong id="dropdown-name-lg">-</strong>
+                            <span id="dropdown-joined">Member since —</span>
+                        </div>
+                    </div>
+
+                    <p class="profile-bio" id="dropdown-bio"></p>
+                    <div class="profile-row"><span>Email</span><strong id="dropdown-email">-</strong></div>
+                    <div class="profile-row"><span>Posts</span><strong id="dropdown-postcount">0</strong></div>
+                    <button class="dropdown-logout logout-link" type="button">Log out</button>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- NEW POST PAGE -->
+    <main class="np-page">
+        <span class="np-decoration d1" aria-hidden="true">Q</span>
+        <span class="np-decoration d2" aria-hidden="true">a</span>
+        <span class="np-decoration d3" aria-hidden="true">¶</span>
+        <span class="np-decoration d4" aria-hidden="true">W</span>
+
+        <div class="np-container">
+
+            <header class="np-heading">
+                <div class="np-eyebrow">Share your thoughts</div>
+                <h1>Create a New Post</h1>
+                <p>Turn your ideas into something amazing. Write, edit and share with the world.</p>
+            </header>
+
+            <div class="np-layout">
+
+                <!-- LEFT: EDITOR -->
+                <section class="np-panel" aria-label="Post editor">
+
+                    <form id="create-blog-form">
+
+                        <div class="np-field">
+                            <label for="blog-title">Post Title <span class="np-required">*</span></label>
+                            <input
+                                type="text"
+                                id="blog-title"
+                                placeholder="Enter an engaging title..."
+                                maxlength="180"
+                                required
+                            >
+                        </div>
+
+                        <div class="np-two-fields">
+                            <div class="np-field">
+                                <label for="blog-category">Category <span class="np-required">*</span></label>
+                                <select id="blog-category" required>
+                                    <option value="">Select category</option>
+                                    <option value="General">General</option>
+                                    <option value="Technology">Technology</option>
+                                    <option value="Lifestyle">Lifestyle</option>
+                                    <option value="Career">Career</option>
+                                    <option value="Tools">Tools</option>
+                                    <option value="Education">Education</option>
+                                    <option value="Travel">Travel</option>
+                                    <option value="Personal">Personal</option>
+                                </select>
+                            </div>
+
+                            <div class="np-field">
+                                <label for="np-status">Status <span class="np-required">*</span></label>
+                                <select id="np-status" required>
+                                    <option value="Draft">Draft</option>
+                                    <option value="Published">Published</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="np-field">
+                            <span class="np-label">Featured Image (Optional)</span>
+
+                            <label class="np-upload" id="np-upload-area" for="np-image-file">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                                     aria-hidden="true">
+                                    <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                    <path d="m21 15-5-5L5 21"></path>
+                                </svg>
+                                <strong id="np-upload-title">Click to upload an image or drag and drop</strong>
+                                <small>JPG, PNG, WEBP (Max 5MB)</small>
+                            </label>
+
+                            <input
+                                type="file"
+                                id="np-image-file"
+                                class="np-file-input"
+                                accept="image/jpeg,image/png,image/webp,image/gif"
+                            >
+
+                            <div id="np-image-status" class="np-image-status" hidden>
+                                <span id="np-image-name"></span>
+                                <button type="button" id="np-remove-image">Remove image</button>
+                            </div>
+
+                            <button type="button" id="np-toggle-url" class="np-url-toggle">
+                                Or add an image URL
+                            </button>
+
+                            <div class="np-url-wrap" id="np-url-wrap">
+                                <input
+                                    type="url"
+                                    id="blog-image"
+                                    placeholder="https://example.com/cover.jpg"
+                                    aria-label="Cover image URL"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="np-field">
+                            <label for="np-editor-content">Content <span class="np-required">*</span></label>
+
+                            <div class="np-editor">
+                                <div class="np-toolbar" role="toolbar" aria-label="Text formatting">
+
+                                    <button type="button" class="np-tool" data-command="bold"
+                                            aria-label="Bold" title="Bold">
+                                        <strong>B</strong>
+                                    </button>
+
+                                    <button type="button" class="np-tool" data-command="italic"
+                                            aria-label="Italic" title="Italic">
+                                        <em>I</em>
+                                    </button>
+
+                                    <button type="button" class="np-tool" data-command="underline"
+                                            aria-label="Underline" title="Underline">
+                                        <u>U</u>
+                                    </button>
+
+                                    <button type="button" class="np-tool" data-command="strikeThrough"
+                                            aria-label="Strikethrough" title="Strikethrough">
+                                        <span style="text-decoration:line-through;font-weight:700;">S</span>
+                                    </button>
+
+                                    <span class="np-toolbar-divider"></span>
+
+                                    <button type="button" class="np-tool" data-command="createLink"
+                                            aria-label="Insert link" title="Insert link">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                             stroke="currentColor" stroke-width="2"
+                                             stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                                        </svg>
+                                    </button>
+
+                                    <button type="button" class="np-tool" data-command="insertUnorderedList"
+                                            aria-label="Bulleted list" title="Bulleted list">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                             stroke="currentColor" stroke-width="2"
+                                             stroke-linecap="round">
+                                            <path d="M9 6h12M9 12h12M9 18h12"></path>
+                                            <path d="M4 6h.01M4 12h.01M4 18h.01" stroke-width="3"></path>
+                                        </svg>
+                                    </button>
+
+                                    <button type="button" class="np-tool" data-command="insertOrderedList"
+                                            aria-label="Numbered list" title="Numbered list">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                             stroke="currentColor" stroke-width="1.8"
+                                             stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M10 6h11M10 12h11M10 18h11"></path>
+                                            <path d="M4 5v3M3 8h3M3 12h2l-2 2h2M3 17h2a1 1 0 0 1 0 2H3"></path>
+                                        </svg>
+                                    </button>
+
+                                    <span class="np-toolbar-divider"></span>
+
+                                    <button type="button" class="np-tool" data-command="justifyLeft"
+                                            aria-label="Align left" title="Align left">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                             stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                                            <path d="M4 6h16M4 10h10M4 14h16M4 18h10"></path>
+                                        </svg>
+                                    </button>
+
+                                    <button type="button" class="np-tool" data-command="justifyCenter"
+                                            aria-label="Align center" title="Align center">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                             stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                                            <path d="M4 6h16M7 10h10M4 14h16M7 18h10"></path>
+                                        </svg>
+                                    </button>
+
+                                    <span class="np-toolbar-divider"></span>
+
+                                    <select id="np-format-block" aria-label="Text style">
+                                        <option value="p">Normal</option>
+                                        <option value="h2">Heading</option>
+                                        <option value="h3">Subheading</option>
+                                        <option value="blockquote">Quote</option>
+                                    </select>
+                                </div>
+
+                                <!-- Contenteditable editor provides real formatting.
+                                     The hidden textarea keeps the existing blog-content ID
+                                     for compatibility with the shared script.js. -->
+                                <div
+                                    id="np-editor-content"
+                                    class="np-editor-content"
+                                    contenteditable="true"
+                                    role="textbox"
+                                    aria-multiline="true"
+                                    aria-label="Write your post"
+                                    data-placeholder="Start writing your post..."
+                                ></div>
+
+                                <textarea
+                                    id="blog-content"
+                                    name="blog-content"
+                                    required
+                                    tabindex="-1"
+                                    aria-hidden="true"
+                                    style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;"
+                                ></textarea>
+                            </div>
+                        </div>
+
+                        <div class="np-editor-footer">
+                            <div class="np-save-note" id="np-save-note" aria-live="polite">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="9"></circle>
+                                    <path d="m8 12 2.5 2.5L16 9"></path>
+                                </svg>
+                                <span id="np-save-text">Your post is ready to write</span>
+                            </div>
+
+                            <div class="np-actions">
+                                <a href="dashboard.html" class="np-button np-button-cancel">
+                                    Cancel
+                                </a>
+
+                                <button type="submit" class="np-button np-button-publish" id="np-publish-btn">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="m22 2-7 20-4-9-9-4Z"></path>
+                                        <path d="M22 2 11 13"></path>
+                                    </svg>
+                                    <span id="np-publish-label">Publish Post</span>
+                                </button>
+                            </div>
+                        </div>
+
+                    </form>
+                </section>
+
+                <!-- RIGHT: LIVE PREVIEW -->
+                <aside class="np-panel np-preview-panel" aria-label="Live post preview">
+
+                    <div class="np-preview-heading">
+                        <h2>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            Live Preview
+                        </h2>
+                        <span class="np-preview-pill">How it will look</span>
+                    </div>
+
+                    <article class="np-preview-card">
+                        <div id="np-preview-image-box">
+                            <div class="np-preview-image np-preview-placeholder" id="np-preview-placeholder">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                    <path d="m21 15-5-5L5 21"></path>
+                                </svg>
+                                <span>A story waiting to be told</span>
+                            </div>
+                            <img
+                                id="np-preview-image"
+                                class="np-preview-image"
+                                alt="Post cover preview"
+                                hidden
+                            >
+                        </div>
+
+                        <div class="np-preview-body">
+                            <span class="np-preview-category" id="np-preview-category">General</span>
+
+                            <h2 class="np-preview-title" id="np-preview-title">Your Post Title</h2>
+
+                            <div class="np-preview-meta">
+                                <span class="np-meta-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+                                        <path d="M16 3v4M8 3v4M3 11h18"></path>
+                                    </svg>
+                                    <span id="np-preview-date"></span>
+                                </span>
+
+                                <span class="np-meta-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                    0 views
+                                </span>
+
+                                <span class="np-meta-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <path d="M12 6v6l4 2"></path>
+                                    </svg>
+                                    <span id="np-preview-readtime">1 min read</span>
+                                </span>
+                            </div>
+
+                            <p class="np-preview-excerpt" id="np-preview-excerpt">
+                                Your content will appear here. This is a preview of how your post will look to readers. You can add images, format your text and make it beautiful.
+                            </p>
+
+                            <div class="np-preview-author">
+                                <div class="np-author-avatar" id="np-author-avatar">U</div>
+                                <span>By <strong id="np-author-name" style="font-weight:600;">You</strong></span>
+                            </div>
+                        </div>
+                    </article>
+                </aside>
+
+            </div>
+
+            <footer class="np-page-footer">
+                © 2026 Quillo. <span>Built as a learning project.</span>
+            </footer>
+        </div>
+    </main>
+
+    <script src="js/script.js"></script>
+
+    <script>
+    (function () {
+        "use strict";
+
+        const form = document.getElementById("create-blog-form");
+        const titleInput = document.getElementById("blog-title");
+        const categoryInput = document.getElementById("blog-category");
+        const statusInput = document.getElementById("np-status");
+        const contentField = document.getElementById("blog-content");
+        const editor = document.getElementById("np-editor-content");
+        const imageUrlInput = document.getElementById("blog-image");
+        const imageFileInput = document.getElementById("np-image-file");
+
+        const previewTitle = document.getElementById("np-preview-title");
+        const previewCategory = document.getElementById("np-preview-category");
+        const previewExcerpt = document.getElementById("np-preview-excerpt");
+        const previewImage = document.getElementById("np-preview-image");
+        const previewPlaceholder = document.getElementById("np-preview-placeholder");
+        const previewReadtime = document.getElementById("np-preview-readtime");
+
+        const uploadArea = document.getElementById("np-upload-area");
+        const uploadTitle = document.getElementById("np-upload-title");
+        const imageStatus = document.getElementById("np-image-status");
+        const imageName = document.getElementById("np-image-name");
+        const removeImageButton = document.getElementById("np-remove-image");
+        const toggleUrlButton = document.getElementById("np-toggle-url");
+        const urlWrap = document.getElementById("np-url-wrap");
+
+        const saveText = document.getElementById("np-save-text");
+        const publishLabel = document.getElementById("np-publish-label");
+        const formatBlock = document.getElementById("np-format-block");
+
+        let selectedImageData = "";
+        let selectedObjectUrl = "";
+        let lastFocusedRange = null;
+
+        function getPlainText() {
+            return (editor.innerText || editor.textContent || "")
+                .replace(/\u00a0/g, " ")
+                .trim();
+        }
+
+        function syncContent() {
+            contentField.value = editor.innerHTML.trim();
+
+            const text = getPlainText();
+            const words = text ? text.split(/\s+/).filter(Boolean).length : 0;
+            const minutes = Math.max(1, Math.ceil(words / 200));
+
+            previewReadtime.textContent = minutes + (minutes === 1 ? " min read" : " min read");
+
+            if (text) {
+                previewExcerpt.textContent =
+                    text.length > 260 ? text.slice(0, 260).trimEnd() + "…" : text;
+            } else {
+                previewExcerpt.textContent =
+                    "Your content will appear here. This is a preview of how your post will look to readers. You can add images, format your text and make it beautiful.";
+            }
+
+            saveText.textContent = text ? "Content ready · " + words + " words" : "Your post is ready to write";
+        }
+
+        function updateTitle() {
+            previewTitle.textContent = titleInput.value.trim() || "Your Post Title";
+        }
+
+        function updateCategory() {
+            previewCategory.textContent = categoryInput.value || "General";
+        }
+
+        function updatePreviewImage(src) {
+            if (!src) {
+                previewImage.removeAttribute("src");
+                previewImage.hidden = true;
+                previewPlaceholder.hidden = false;
+                return;
+            }
+
+            previewImage.onload = function () {
+                previewImage.hidden = false;
+                previewPlaceholder.hidden = true;
+            };
+
+            previewImage.onerror = function () {
+                previewImage.hidden = true;
+                previewPlaceholder.hidden = false;
+            };
+
+            previewImage.src = src;
+        }
+
+        function rememberSelection() {
+            const selection = window.getSelection();
+
+            if (!selection || !selection.rangeCount) return;
+
+            const range = selection.getRangeAt(0);
+
+            if (editor.contains(range.commonAncestorContainer)) {
+                lastFocusedRange = range.cloneRange();
+            }
+        }
+
+        function restoreSelection() {
+            if (!lastFocusedRange) {
+                editor.focus();
+                return;
+            }
+
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(lastFocusedRange);
+            editor.focus();
+        }
+
+        function runFormatting(command, value) {
+            restoreSelection();
+
+            if (command === "createLink") {
+                const url = window.prompt("Enter the link URL (https://...)");
+
+                if (!url) return;
+
+                try {
+                    const parsed = new URL(url);
+                    if (!["http:", "https:", "mailto:"].includes(parsed.protocol)) {
+                        window.alert("Please enter a valid web link.");
+                        return;
+                    }
+                } catch (error) {
+                    window.alert("Please enter a valid link URL.");
+                    return;
+                }
+
+                document.execCommand("createLink", false, url);
+            } else {
+                document.execCommand(command, false, value || null);
+            }
+
+            rememberSelection();
+            syncContent();
+            updateExcerptFromEditor();
+        }
+
+        function updateExcerptFromEditor() {
+            syncContent();
+        }
+
+        editor.addEventListener("input", function () {
+            rememberSelection();
+            syncContent();
+        });
+
+        editor.addEventListener("keyup", rememberSelection);
+        editor.addEventListener("mouseup", rememberSelection);
+        editor.addEventListener("focus", rememberSelection);
+
+        document.querySelectorAll(".np-tool[data-command]").forEach(function (button) {
+            button.addEventListener("mousedown", function (event) {
+                // Keep the editor selection while clicking the toolbar.
+                event.preventDefault();
+                rememberSelection();
+            });
+
+            button.addEventListener("click", function () {
+                runFormatting(button.dataset.command);
+            });
+        });
+
+        formatBlock.addEventListener("change", function () {
+            runFormatting("formatBlock", "<" + formatBlock.value + ">");
+            formatBlock.value = "p";
+        });
+
+        titleInput.addEventListener("input", updateTitle);
+        categoryInput.addEventListener("change", updateCategory);
+
+        imageUrlInput.addEventListener("input", function () {
+            const value = imageUrlInput.value.trim();
+
+            if (value) {
+                selectedImageData = "";
+                updatePreviewImage(value);
+            } else if (!selectedImageData) {
+                updatePreviewImage("");
+            }
+        });
+
+        toggleUrlButton.addEventListener("click", function () {
+            const isVisible = urlWrap.classList.toggle("visible");
+            toggleUrlButton.textContent = isVisible
+                ? "Hide image URL"
+                : "Or add an image URL";
+
+            if (isVisible) imageUrlInput.focus();
+        });
+
+        function clearSelectedImage() {
+            if (selectedObjectUrl) {
+                URL.revokeObjectURL(selectedObjectUrl);
+                selectedObjectUrl = "";
+            }
+
+            selectedImageData = "";
+            imageFileInput.value = "";
+            imageUrlInput.value = "";
+            imageName.textContent = "";
+            imageStatus.hidden = true;
+            uploadTitle.textContent = "Click to upload an image or drag and drop";
+            updatePreviewImage("");
+        }
+
+        function handleImageFile(file) {
+            if (!file) return;
+
+            const allowedTypes = [
+                "image/jpeg",
+                "image/png",
+                "image/webp",
+                "image/gif"
+            ];
+
+            if (!allowedTypes.includes(file.type)) {
+                window.alert("Please choose a JPG, PNG, WEBP or GIF image.");
+                imageFileInput.value = "";
+                return;
+            }
+
+            if (file.size > 5 * 1024 * 1024) {
+                window.alert("The image must be 5MB or smaller.");
+                imageFileInput.value = "";
+                return;
+            }
+
+            if (selectedObjectUrl) {
+                URL.revokeObjectURL(selectedObjectUrl);
+            }
+
+            selectedObjectUrl = URL.createObjectURL(file);
+            selectedImageData = selectedObjectUrl;
+            imageUrlInput.value = "";
+
+            updatePreviewImage(selectedImageData);
+            imageName.textContent = file.name;
+            imageStatus.hidden = false;
+            uploadTitle.textContent = "Image selected";
+        }
+
+        imageFileInput.addEventListener("change", function () {
+            handleImageFile(imageFileInput.files[0]);
+        });
+
+        removeImageButton.addEventListener("click", clearSelectedImage);
+
+        ["dragenter", "dragover"].forEach(function (eventName) {
+            uploadArea.addEventListener(eventName, function (event) {
+                event.preventDefault();
+                uploadArea.classList.add("dragging");
+            });
+        });
+
+        ["dragleave", "drop"].forEach(function (eventName) {
+            uploadArea.addEventListener(eventName, function (event) {
+                event.preventDefault();
+                uploadArea.classList.remove("dragging");
+            });
+        });
+
+        uploadArea.addEventListener("drop", function (event) {
+            const file = event.dataTransfer.files[0];
+            handleImageFile(file);
+        });
+
+        /* Populate the author from the existing Quillo user data. */
+        try {
+            const userName = localStorage.getItem("userName") || "You";
+            const avatar = localStorage.getItem("userAvatar") || "";
+            const firstLetter = userName.trim().charAt(0).toUpperCase() || "U";
+
+            document.getElementById("np-author-name").textContent = userName;
+            document.getElementById("np-author-avatar").textContent = firstLetter;
+
+            if (avatar) {
+                document.getElementById("np-author-avatar").style.backgroundImage =
+                    'url("' + avatar.replace(/"/g, "%22") + '")';
+                document.getElementById("np-author-avatar").style.backgroundSize = "cover";
+                document.getElementById("np-author-avatar").style.backgroundPosition = "center";
+                document.getElementById("np-author-avatar").textContent = "";
+            }
+        } catch (error) {
+            // Keep the default preview author if browser storage is unavailable.
+        }
+
+        document.getElementById("np-preview-date").textContent =
+            new Date().toLocaleDateString(undefined, {
+                month: "short",
+                day: "numeric",
+                year: "numeric"
+            });
+
+        /*
+         * The original shared script.js remains responsible for saving a post.
+         * This handler keeps the original form IDs in sync with the rich editor.
+         * Status and uploaded file handling require the save routine to support
+         * those fields; this page does not replace the existing save routine.
+         */
+        form.addEventListener("submit", function (event) {
+            syncContent();
+
+            const plainText = getPlainText();
+
+            if (!titleInput.value.trim() || !categoryInput.value || !plainText) {
+                event.preventDefault();
+
+                if (!titleInput.value.trim()) {
+                    titleInput.focus();
+                } else if (!categoryInput.value) {
+                    categoryInput.focus();
+                } else {
+                    editor.focus();
+                }
+
+                window.alert("Please enter a title, select a category, and write your post content.");
+                return;
+            }
+
+            /*
+             * Keep the existing blog-image field as the shared script's image URL.
+             * A locally selected file is preview-only unless the existing app has
+             * an upload/storage routine for it.
+             */
+            if (selectedImageData && selectedImageData.startsWith("blob:")) {
+                imageUrlInput.value = "";
+            }
+
+            publishLabel.textContent =
+                statusInput.value === "Draft" ? "Saving Draft…" : "Publishing…";
+        });
+
+        /* If a browser restores this page, refresh the derived preview. */
+        updateTitle();
+        updateCategory();
+        syncContent();
+
+    })();
+    </script>
+
+</body>
+</html>

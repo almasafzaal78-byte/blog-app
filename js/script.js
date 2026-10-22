@@ -1,5 +1,5 @@
 // =====================================================================
-// QUİLLO - COMPLETE SCRIPT.JS (UPDATED)
+// QUİLLO - COMPLETE SCRIPT.JS (UPDATED: register + login use the backend)
 // =====================================================================
 
 
@@ -10,9 +10,7 @@
 (function initAmbient() {
 
     const bg = document.createElement("div");
-
     bg.className = "ambient-bg";
-
     bg.innerHTML =
         '<div class="wave wave-1"></div>' +
         '<div class="wave wave-2"></div>' +
@@ -22,49 +20,21 @@
         document.body.prepend(bg);
     }
 
-    const glyphs = [
-        "A", "a", "Q", "W", "R", "e",
-        "&", "¶", "§", "“", "”", "?"
-    ];
-
-    const colors = [
-        "#2f4a3c",
-        "#c98a3f",
-        "#4c7a54"
-    ];
+    const glyphs = ["A", "a", "Q", "W", "R", "e", "&", "¶", "§", "“", "”", "?"];
+    const colors = ["#2f4a3c", "#c98a3f", "#4c7a54"];
 
     for (let i = 0; i < 16; i++) {
 
         const el = document.createElement("div");
-
         el.className = "floating-letter";
-
         el.textContent = glyphs[i % glyphs.length];
-
-        el.style.left =
-            (Math.random() * 96) + "vw";
-
-        el.style.fontSize =
-            (34 + Math.random() * 50) + "px";
-
-        el.style.color =
-            colors[i % colors.length];
-
-        el.style.animationDuration =
-            (16 + Math.random() * 14) + "s";
-
-        el.style.animationDelay =
-            "-" + (Math.random() * 25) + "s";
-
-        el.style.setProperty(
-            "--peak",
-            (0.18 + Math.random() * 0.14).toFixed(2)
-        );
-
-        el.style.setProperty(
-            "--drift",
-            (Math.random() * 120 - 60).toFixed(0) + "px"
-        );
+        el.style.left = (Math.random() * 96) + "vw";
+        el.style.fontSize = (34 + Math.random() * 50) + "px";
+        el.style.color = colors[i % colors.length];
+        el.style.animationDuration = (16 + Math.random() * 14) + "s";
+        el.style.animationDelay = "-" + (Math.random() * 25) + "s";
+        el.style.setProperty("--peak", (0.18 + Math.random() * 0.14).toFixed(2));
+        el.style.setProperty("--drift", (Math.random() * 120 - 60).toFixed(0) + "px");
 
         document.body.appendChild(el);
     }
@@ -89,49 +59,21 @@
         '<div class="hero-ring r1"></div>' +
         '<div class="hero-ring r2"></div>';
 
-    const glyphs = [
-        "A", "a", "Q", "W", "¶",
-        "“", "&", "R", "§", "e", "”"
-    ];
-
-    const tints = [
-        "#f5f1e6",
-        "#e0a24a"
-    ];
+    const glyphs = ["A", "a", "Q", "W", "¶", "“", "&", "R", "§", "e", "”"];
+    const tints = ["#f5f1e6", "#e0a24a"];
 
     for (let i = 0; i < 20; i++) {
 
         const g = document.createElement("span");
-
         g.className = "hero-glyph";
-
-        g.textContent =
-            glyphs[i % glyphs.length];
-
-        g.style.left =
-            (Math.random() * 96) + "%";
-
-        g.style.fontSize =
-            (28 + Math.random() * 46) + "px";
-
-        g.style.color =
-            tints[i % 2];
-
-        g.style.animationDuration =
-            (9 + Math.random() * 9) + "s";
-
-        g.style.animationDelay =
-            "-" + (Math.random() * 14) + "s";
-
-        g.style.setProperty(
-            "--peak",
-            (0.22 + Math.random() * 0.2).toFixed(2)
-        );
-
-        g.style.setProperty(
-            "--drift",
-            (Math.random() * 90 - 45).toFixed(0) + "px"
-        );
+        g.textContent = glyphs[i % glyphs.length];
+        g.style.left = (Math.random() * 96) + "%";
+        g.style.fontSize = (28 + Math.random() * 46) + "px";
+        g.style.color = tints[i % 2];
+        g.style.animationDuration = (9 + Math.random() * 9) + "s";
+        g.style.animationDelay = "-" + (Math.random() * 14) + "s";
+        g.style.setProperty("--peak", (0.22 + Math.random() * 0.2).toFixed(2));
+        g.style.setProperty("--drift", (Math.random() * 90 - 45).toFixed(0) + "px");
 
         fx.appendChild(g);
     }
@@ -146,8 +88,7 @@
 
 (function initTypewriterCard() {
 
-    const target =
-        document.getElementById("type-target");
+    const target = document.getElementById("type-target");
 
     if (!target) return;
 
@@ -168,39 +109,26 @@
         if (!deleting) {
 
             charIndex++;
-
-            target.textContent =
-                full.slice(0, charIndex);
+            target.textContent = full.slice(0, charIndex);
 
             if (charIndex === full.length) {
-
                 deleting = true;
-
                 setTimeout(tick, 1400);
-
                 return;
             }
 
         } else {
 
             charIndex--;
-
-            target.textContent =
-                full.slice(0, charIndex);
+            target.textContent = full.slice(0, charIndex);
 
             if (charIndex === 0) {
-
                 deleting = false;
-
-                lineIndex =
-                    (lineIndex + 1) % lines.length;
+                lineIndex = (lineIndex + 1) % lines.length;
             }
         }
 
-        setTimeout(
-            tick,
-            deleting ? 28 : 55
-        );
+        setTimeout(tick, deleting ? 28 : 55);
     }
 
     tick();
@@ -215,121 +143,89 @@
 
 function navigateTo(url) {
 
-    if (
-        document.querySelector(".exit-green")
-    ) {
+    if (document.querySelector(".exit-green")) {
         return;
     }
 
-    const gold =
-        document.createElement("div");
-
+    const gold = document.createElement("div");
     gold.className = "exit-gold";
 
-    const green =
-        document.createElement("div");
-
+    const green = document.createElement("div");
     green.className = "exit-green";
-
     green.textContent = "Quillo";
 
     document.body.appendChild(gold);
     document.body.appendChild(green);
 
     requestAnimationFrame(function () {
-
         requestAnimationFrame(function () {
-
             gold.classList.add("in");
-
             green.classList.add("in");
-
         });
-
     });
 
     setTimeout(function () {
-
         window.location.href = url;
-
     }, 680);
 }
 
 
-document.addEventListener(
-    "click",
-    function (e) {
+document.addEventListener("click", function (e) {
 
-        if (
-            e.defaultPrevented ||
-            e.button !== 0 ||
-            e.ctrlKey ||
-            e.metaKey ||
-            e.shiftKey ||
-            e.altKey
-        ) {
-            return;
-        }
+    if (
+        e.defaultPrevented ||
+        e.button !== 0 ||
+        e.ctrlKey ||
+        e.metaKey ||
+        e.shiftKey ||
+        e.altKey
+    ) {
+        return;
+    }
 
-        const link =
-            e.target.closest("a");
+    const link = e.target.closest("a");
 
-        if (!link) return;
+    if (!link) return;
 
-        const href =
-            link.getAttribute("href");
+    const href = link.getAttribute("href");
 
-        if (
-            !href ||
-            href.startsWith("#") ||
-            href.startsWith("mailto:") ||
-            href.startsWith("tel:")
-        ) {
-            return;
-        }
+    if (
+        !href ||
+        href.startsWith("#") ||
+        href.startsWith("mailto:") ||
+        href.startsWith("tel:")
+    ) {
+        return;
+    }
 
-        if (
-            link.target === "_blank" ||
-            link.hasAttribute("download")
-        ) {
-            return;
-        }
+    if (link.target === "_blank" || link.hasAttribute("download")) {
+        return;
+    }
 
-        if (
-            /^https?:\/\//i.test(href) &&
-            !href.includes(window.location.hostname)
-        ) {
-            return;
-        }
+    if (/^https?:\/\//i.test(href) && !href.includes(window.location.hostname)) {
+        return;
+    }
 
-        e.preventDefault();
+    e.preventDefault();
 
-        navigateTo(href);
+    navigateTo(href);
+
+});
+
+
+window.addEventListener("pageshow", function (e) {
+
+    if (e.persisted) {
+
+        document
+            .querySelectorAll(".exit-gold, .exit-green")
+            .forEach(function (el) {
+                el.remove();
+            });
 
     }
-);
 
-
-window.addEventListener(
-    "pageshow",
-    function (e) {
-
-        if (e.persisted) {
-
-            document
-                .querySelectorAll(
-                    ".exit-gold, .exit-green"
-                )
-                .forEach(function (el) {
-
-                    el.remove();
-
-                });
-
-        }
-
-    }
-);
+});
 
 
 
@@ -337,48 +233,32 @@ window.addEventListener(
 // 5. SPLASH SCREEN
 // =====================================================================
 
-window.addEventListener(
-    "load",
-    function () {
+window.addEventListener("load", function () {
 
-        const splash =
-            document.getElementById(
-                "splash-screen"
-            );
+    const splash = document.getElementById("splash-screen");
 
-        if (!splash) return;
+    if (!splash) return;
 
-        if (
-            sessionStorage.getItem(
-                "splashShown"
-            )
-        ) {
+    if (sessionStorage.getItem("splashShown")) {
 
-            splash.style.display = "none";
+        splash.style.display = "none";
 
-        } else {
+    } else {
+
+        setTimeout(function () {
+
+            splash.style.opacity = "0";
 
             setTimeout(function () {
+                splash.style.display = "none";
+            }, 600);
 
-                splash.style.opacity = "0";
+        }, 2400);
 
-                setTimeout(function () {
-
-                    splash.style.display =
-                        "none";
-
-                }, 600);
-
-            }, 2400);
-
-            sessionStorage.setItem(
-                "splashShown",
-                "true"
-            );
-        }
-
+        sessionStorage.setItem("splashShown", "true");
     }
-);
+
+});
 
 
 
@@ -390,90 +270,61 @@ function showToast(message, type) {
 
     type = type || "info";
 
-    const old =
-        document.querySelector(".flash-text");
+    const old = document.querySelector(".flash-text");
 
     if (old) old.remove();
 
-    const wrap =
-        document.createElement("div");
+    const wrap = document.createElement("div");
+    wrap.className = "flash-text flash-" + type;
 
-    wrap.className =
-        "flash-text flash-" + type;
-
-    const letters =
-        document.createElement("div");
-
-    letters.className =
-        "flash-letters";
+    const letters = document.createElement("div");
+    letters.className = "flash-letters";
 
     let index = 0;
 
-    message.split(" ").forEach(
-        function (word, wi, arr) {
+    message.split(" ").forEach(function (word, wi, arr) {
 
-            const w =
-                document.createElement("span");
+        const w = document.createElement("span");
+        w.className = "flash-word";
 
-            w.className =
-                "flash-word";
+        word.split("").forEach(function (ch) {
 
-            word.split("").forEach(
-                function (ch) {
+            const s = document.createElement("span");
+            s.className = "ch";
+            s.textContent = ch;
+            s.style.animationDelay = (index * 35) + "ms";
 
-                    const s =
-                        document.createElement("span");
+            w.appendChild(s);
 
-                    s.className = "ch";
+            index++;
 
-                    s.textContent = ch;
+        });
 
-                    s.style.animationDelay =
-                        (index * 35) + "ms";
+        letters.appendChild(w);
 
-                    w.appendChild(s);
-
-                    index++;
-
-                }
-            );
-
-            letters.appendChild(w);
-
-            if (wi < arr.length - 1) {
-
-                letters.appendChild(
-                    document.createTextNode(" ")
-                );
-
-                index++;
-            }
-
+        if (wi < arr.length - 1) {
+            letters.appendChild(document.createTextNode(" "));
+            index++;
         }
-    );
 
-    const line =
-        document.createElement("div");
+    });
 
+    const line = document.createElement("div");
     line.className = "flash-line";
 
     wrap.appendChild(letters);
-
     wrap.appendChild(line);
 
     document.body.appendChild(wrap);
 
-    const visibleFor =
-        index * 35 + 1700;
+    const visibleFor = index * 35 + 1700;
 
     setTimeout(function () {
 
         wrap.classList.add("out");
 
         setTimeout(function () {
-
             wrap.remove();
-
         }, 500);
 
     }, visibleFor);
@@ -488,8 +339,7 @@ function showToast(message, type) {
 
 function getBlogs() {
 
-    let blogs =
-        localStorage.getItem("blogs");
+    let blogs = localStorage.getItem("blogs");
 
     if (!blogs) {
 
@@ -549,13 +399,9 @@ function getBlogs() {
 
         ];
 
-        localStorage.setItem(
-            "blogs",
-            JSON.stringify(seed)
-        );
+        localStorage.setItem("blogs", JSON.stringify(seed));
 
-        blogs =
-            JSON.stringify(seed);
+        blogs = JSON.stringify(seed);
     }
 
     return JSON.parse(blogs);
@@ -564,28 +410,16 @@ function getBlogs() {
 
 function saveBlogs(blogs) {
 
-    localStorage.setItem(
-        "blogs",
-        JSON.stringify(blogs)
-    );
+    localStorage.setItem("blogs", JSON.stringify(blogs));
 
 }
 
 
 function getNextId(blogs) {
 
-    const maxId =
-        blogs.reduce(
-            function (max, b) {
-
-                return Math.max(
-                    max,
-                    parseInt(b.id, 10)
-                );
-
-            },
-            0
-        );
+    const maxId = blogs.reduce(function (max, b) {
+        return Math.max(max, parseInt(b.id, 10));
+    }, 0);
 
     return String(maxId + 1);
 
@@ -594,16 +428,11 @@ function getNextId(blogs) {
 
 function stripHtml(html) {
 
-    const div =
-        document.createElement("div");
+    const div = document.createElement("div");
 
     div.innerHTML = html || "";
 
-    return (
-        div.textContent ||
-        div.innerText ||
-        ""
-    );
+    return div.textContent || div.innerText || "";
 
 }
 
@@ -621,12 +450,7 @@ function wordCount(html) {
 
 function readTime(html) {
 
-    return Math.max(
-        1,
-        Math.round(
-            wordCount(html) / 200
-        )
-    );
+    return Math.max(1, Math.round(wordCount(html) / 200));
 
 }
 
@@ -653,10 +477,7 @@ const WRITING_PHOTO_IDS = [
 function blogImage(id) {
 
     const photoId =
-        WRITING_PHOTO_IDS[
-            parseInt(id, 10) %
-            WRITING_PHOTO_IDS.length
-        ];
+        WRITING_PHOTO_IDS[parseInt(id, 10) % WRITING_PHOTO_IDS.length];
 
     return (
         "https://images.unsplash.com/photo-" +
@@ -669,9 +490,7 @@ function blogImage(id) {
 
 function blogCardHTML(b) {
 
-    const img =
-        b.coverImage ||
-        blogImage(b.id);
+    const img = b.coverImage || blogImage(b.id);
 
     return `
         <div class="blog-card">
@@ -726,293 +545,131 @@ function blogCardHTML(b) {
 
 function updateAuthUI() {
 
-    const loggedIn =
-        localStorage.getItem(
-            "isLoggedIn"
-        ) === "true";
-
-    const name =
-        localStorage.getItem(
-            "userName"
-        ) || "there";
-
-    const email =
-        localStorage.getItem(
-            "userEmail"
-        ) || "-";
-
-    const bio =
-        localStorage.getItem(
-            "userBio"
-        ) || "";
-
-    const avatar =
-        localStorage.getItem(
-            "userAvatar"
-        ) || "";
-
-    const joined =
-        localStorage.getItem(
-            "userJoinDate"
-        ) || "";
+    const loggedIn = localStorage.getItem("isLoggedIn") === "true";
+    const name = localStorage.getItem("userName") || "there";
+    const email = localStorage.getItem("userEmail") || "-";
+    const bio = localStorage.getItem("userBio") || "";
+    const avatar = localStorage.getItem("userAvatar") || "";
+    const joined = localStorage.getItem("userJoinDate") || "";
 
 
-    document
-        .querySelectorAll(".guest-nav")
-        .forEach(function (el) {
+    document.querySelectorAll(".guest-nav").forEach(function (el) {
+        el.style.display = loggedIn ? "none" : "flex";
+    });
 
-            el.style.display =
-                loggedIn
-                    ? "none"
-                    : "flex";
+    document.querySelectorAll(".user-nav").forEach(function (el) {
+        el.style.display = loggedIn ? "flex" : "none";
+    });
 
-        });
+    document.querySelectorAll(".guest-only-section").forEach(function (el) {
+        el.style.display = loggedIn ? "none" : "block";
+    });
 
+    document.querySelectorAll(".user-only-section").forEach(function (el) {
+        el.style.display = loggedIn ? "block" : "none";
+    });
 
-    document
-        .querySelectorAll(".user-nav")
-        .forEach(function (el) {
-
-            el.style.display =
-                loggedIn
-                    ? "flex"
-                    : "none";
-
-        });
+    document.querySelectorAll(".welcome-name").forEach(function (el) {
+        el.innerText = name;
+    });
 
 
-    document
-        .querySelectorAll(".guest-only-section")
-        .forEach(function (el) {
-
-            el.style.display =
-                loggedIn
-                    ? "none"
-                    : "block";
-
-        });
+    const initial = name.charAt(0).toUpperCase();
 
 
-    document
-        .querySelectorAll(".user-only-section")
-        .forEach(function (el) {
-
-            el.style.display =
-                loggedIn
-                    ? "block"
-                    : "none";
-
-        });
-
-
-    document
-        .querySelectorAll(".welcome-name")
-        .forEach(function (el) {
-
-            el.innerText = name;
-
-        });
-
-
-    const initial =
-        name.charAt(0).toUpperCase();
-
-
-    const profileIcon =
-        document.getElementById(
-            "profile-icon"
-        );
+    const profileIcon = document.getElementById("profile-icon");
 
     if (profileIcon) {
-
         profileIcon.innerHTML =
-            avatar
-                ? '<img src="' +
-                  avatar +
-                  '" alt="">'
-                : initial;
-
+            avatar ? '<img src="' + avatar + '" alt="">' : initial;
     }
 
 
-    const avatarLg =
-        document.getElementById(
-            "profile-avatar-lg"
-        );
+    const avatarLg = document.getElementById("profile-avatar-lg");
 
     if (avatarLg) {
-
         avatarLg.innerHTML =
-            avatar
-                ? '<img src="' +
-                  avatar +
-                  '" alt="">'
-                : initial;
-
+            avatar ? '<img src="' + avatar + '" alt="">' : initial;
     }
 
 
-    const dropNameLg =
-        document.getElementById(
-            "dropdown-name-lg"
-        );
+    const dropNameLg = document.getElementById("dropdown-name-lg");
 
     if (dropNameLg) {
-
-        dropNameLg.innerText =
-            name;
-
+        dropNameLg.innerText = name;
     }
 
 
-    const dropJoined =
-        document.getElementById(
-            "dropdown-joined"
-        );
+    const dropJoined = document.getElementById("dropdown-joined");
 
     if (dropJoined) {
-
-        dropJoined.innerText =
-            joined
-                ? "Member since " + joined
-                : "";
-
+        dropJoined.innerText = joined ? "Member since " + joined : "";
     }
 
 
-    const dropBio =
-        document.getElementById(
-            "dropdown-bio"
-        );
+    const dropBio = document.getElementById("dropdown-bio");
 
     if (dropBio) {
-
-        dropBio.innerText =
-            bio;
-
+        dropBio.innerText = bio;
     }
 
 
-    const dropEmail =
-        document.getElementById(
-            "dropdown-email"
-        );
+    const dropEmail = document.getElementById("dropdown-email");
 
     if (dropEmail) {
-
-        dropEmail.innerText =
-            email;
-
+        dropEmail.innerText = email;
     }
 
 
-    const myPosts =
-        getBlogs().filter(
-            function (b) {
-
-                return (
-                    b.authorEmail === email
-                );
-
-            }
-        ).length;
+    const myPosts = getBlogs().filter(function (b) {
+        return b.authorEmail === email;
+    }).length;
 
 
-    const dropCount =
-        document.getElementById(
-            "dropdown-postcount"
-        );
+    const dropCount = document.getElementById("dropdown-postcount");
 
     if (dropCount) {
-
-        dropCount.innerText =
-            myPosts;
-
+        dropCount.innerText = myPosts;
     }
 
 
     // ---------------- PROFILE TAB ----------------
 
-    const ptAvatar =
-        document.getElementById(
-            "pt-avatar"
-        );
+    const ptAvatar = document.getElementById("pt-avatar");
 
     if (ptAvatar) {
-
         ptAvatar.innerHTML =
-            avatar
-                ? '<img src="' +
-                  avatar +
-                  '" alt="">'
-                : initial;
-
+            avatar ? '<img src="' + avatar + '" alt="">' : initial;
     }
 
-
-    const ptName =
-        document.getElementById(
-            "pt-name"
-        );
+    const ptName = document.getElementById("pt-name");
 
     if (ptName) {
-
-        ptName.innerText =
-            name;
-
+        ptName.innerText = name;
     }
 
-
-    const ptEmail =
-        document.getElementById(
-            "pt-email"
-        );
+    const ptEmail = document.getElementById("pt-email");
 
     if (ptEmail) {
-
-        ptEmail.innerText =
-            email;
-
+        ptEmail.innerText = email;
     }
 
-
-    const ptBio =
-        document.getElementById(
-            "pt-bio"
-        );
+    const ptBio = document.getElementById("pt-bio");
 
     if (ptBio) {
-
-        ptBio.innerText =
-            bio ||
-            "No bio added yet.";
-
+        ptBio.innerText = bio || "No bio added yet.";
     }
 
-
-    const ptPosts =
-        document.getElementById(
-            "pt-posts"
-        );
+    const ptPosts = document.getElementById("pt-posts");
 
     if (ptPosts) {
-
-        ptPosts.innerText =
-            myPosts;
-
+        ptPosts.innerText = myPosts;
     }
 
-
-    const ptJoined =
-        document.getElementById(
-            "pt-joined"
-        );
+    const ptJoined = document.getElementById("pt-joined");
 
     if (ptJoined) {
-
-        ptJoined.innerText =
-            joined || "—";
-
+        ptJoined.innerText = joined || "—";
     }
 
     // Active navbar highlight
@@ -1021,12 +678,12 @@ function updateAuthUI() {
 }
 
 
-// ★ NEW: Jis page par ho, sirf wahi nav link highlight ho
+// Highlight only the nav link of the page that is open
 function setActiveNav() {
 
     var path = window.location.pathname.split("/").pop() || "home.html";
 
-    // index.html ko bhi home samjho
+    // index.html counts as home
     if (path === "index.html" || path === "") {
         path = "home.html";
     }
@@ -1037,10 +694,8 @@ function setActiveNav() {
 
         if (!href) return;
 
-        // pehle active hatao
         link.classList.remove("active");
 
-        // current page se match karo
         if (href === path) {
             link.classList.add("active");
         }
@@ -1058,55 +713,31 @@ updateAuthUI();
 // 10. PROFILE DROPDOWN
 // =====================================================================
 
-const profileToggle =
-    document.getElementById(
-        "profile-icon"
-    );
-
-const profileDropdown =
-    document.getElementById(
-        "profile-dropdown"
-    );
+const profileToggle = document.getElementById("profile-icon");
+const profileDropdown = document.getElementById("profile-dropdown");
 
 
-if (
-    profileToggle &&
-    profileDropdown
-) {
+if (profileToggle && profileDropdown) {
 
-    profileToggle.addEventListener(
-        "click",
-        function (e) {
+    profileToggle.addEventListener("click", function (e) {
 
-            e.stopPropagation();
+        e.stopPropagation();
 
-            profileDropdown.classList.toggle(
-                "open"
-            );
+        profileDropdown.classList.toggle("open");
 
+    });
+
+
+    document.addEventListener("click", function (e) {
+
+        if (
+            !profileDropdown.contains(e.target) &&
+            e.target !== profileToggle
+        ) {
+            profileDropdown.classList.remove("open");
         }
-    );
 
-
-    document.addEventListener(
-        "click",
-        function (e) {
-
-            if (
-                !profileDropdown.contains(
-                    e.target
-                ) &&
-                e.target !== profileToggle
-            ) {
-
-                profileDropdown.classList.remove(
-                    "open"
-                );
-
-            }
-
-        }
-    );
+    });
 
 }
 
@@ -1116,40 +747,13 @@ if (
 // 11. EDIT PROFILE MODAL
 // =====================================================================
 
-const editProfileBtn =
-    document.getElementById(
-        "edit-profile-btn"
-    );
-
-const ptEditBtn =
-    document.getElementById(
-        "pt-edit-btn"
-    );
-
-const editProfileModal =
-    document.getElementById(
-        "edit-profile-modal"
-    );
-
-const editProfileForm =
-    document.getElementById(
-        "edit-profile-form"
-    );
-
-const editProfileCancel =
-    document.getElementById(
-        "edit-profile-cancel"
-    );
-
-const editAvatarInput =
-    document.getElementById(
-        "edit-avatar-input"
-    );
-
-const editAvatarPreview =
-    document.getElementById(
-        "edit-avatar-preview"
-    );
+const editProfileBtn = document.getElementById("edit-profile-btn");
+const ptEditBtn = document.getElementById("pt-edit-btn");
+const editProfileModal = document.getElementById("edit-profile-modal");
+const editProfileForm = document.getElementById("edit-profile-form");
+const editProfileCancel = document.getElementById("edit-profile-cancel");
+const editAvatarInput = document.getElementById("edit-avatar-input");
+const editAvatarPreview = document.getElementById("edit-avatar-preview");
 
 let editAvatarBase64 = null;
 
@@ -1161,91 +765,34 @@ function openEditProfileModal() {
         return;
     }
 
+    const name = localStorage.getItem("userName") || "";
+    const email = localStorage.getItem("userEmail") || "";
+    const bio = localStorage.getItem("userBio") || "";
+    const avatar = localStorage.getItem("userAvatar") || "";
 
-    const name =
-        localStorage.getItem(
-            "userName"
-        ) || "";
+    const nameInput = document.getElementById("edit-name");
+    const emailInput = document.getElementById("edit-email");
+    const bioInput = document.getElementById("edit-bio");
+    const passwordInput = document.getElementById("edit-password");
 
-    const email =
-        localStorage.getItem(
-            "userEmail"
-        ) || "";
+    if (nameInput) nameInput.value = name;
+    if (emailInput) emailInput.value = email;
+    if (bioInput) bioInput.value = bio;
+    if (passwordInput) passwordInput.value = "";
 
-    const bio =
-        localStorage.getItem(
-            "userBio"
-        ) || "";
-
-    const avatar =
-        localStorage.getItem(
-            "userAvatar"
-        ) || "";
-
-
-    const nameInput =
-        document.getElementById(
-            "edit-name"
-        );
-
-    const emailInput =
-        document.getElementById(
-            "edit-email"
-        );
-
-    const bioInput =
-        document.getElementById(
-            "edit-bio"
-        );
-
-    const passwordInput =
-        document.getElementById(
-            "edit-password"
-        );
-
-
-    if (nameInput)
-        nameInput.value = name;
-
-    if (emailInput)
-        emailInput.value = email;
-
-    if (bioInput)
-        bioInput.value = bio;
-
-    if (passwordInput)
-        passwordInput.value = "";
-
-
-    editAvatarBase64 =
-        avatar || null;
-
+    editAvatarBase64 = avatar || null;
 
     if (editAvatarPreview) {
-
         editAvatarPreview.innerHTML =
             avatar
-                ? '<img src="' +
-                  avatar +
-                  '" alt="">'
-                : name
-                    .charAt(0)
-                    .toUpperCase();
-
+                ? '<img src="' + avatar + '" alt="">'
+                : name.charAt(0).toUpperCase();
     }
 
-
-    editProfileModal.classList.add(
-        "open"
-    );
-
+    editProfileModal.classList.add("open");
 
     if (profileDropdown) {
-
-        profileDropdown.classList.remove(
-            "open"
-        );
-
+        profileDropdown.classList.remove("open");
     }
 
 }
@@ -1255,11 +802,7 @@ function openEditProfileModal() {
 function closeEditProfileModal() {
 
     if (editProfileModal) {
-
-        editProfileModal.classList.remove(
-            "open"
-        );
-
+        editProfileModal.classList.remove("open");
     }
 
 }
@@ -1267,112 +810,68 @@ function closeEditProfileModal() {
 
 
 if (editProfileBtn) {
-
-    editProfileBtn.addEventListener(
-        "click",
-        openEditProfileModal
-    );
-
+    editProfileBtn.addEventListener("click", openEditProfileModal);
 }
-
 
 if (ptEditBtn) {
-
-    ptEditBtn.addEventListener(
-        "click",
-        openEditProfileModal
-    );
-
+    ptEditBtn.addEventListener("click", openEditProfileModal);
 }
-
 
 if (editProfileCancel) {
-
-    editProfileCancel.addEventListener(
-        "click",
-        closeEditProfileModal
-    );
-
+    editProfileCancel.addEventListener("click", closeEditProfileModal);
 }
-
 
 if (editProfileModal) {
 
-    editProfileModal.addEventListener(
-        "click",
-        function (e) {
+    editProfileModal.addEventListener("click", function (e) {
 
-            if (
-                e.target ===
-                editProfileModal
-            ) {
-
-                closeEditProfileModal();
-
-            }
-
+        if (e.target === editProfileModal) {
+            closeEditProfileModal();
         }
-    );
+
+    });
 
 }
 
 
-document.addEventListener(
-    "keydown",
-    function (e) {
+document.addEventListener("keydown", function (e) {
 
-        if (
-            e.key === "Escape" &&
-            editProfileModal &&
-            editProfileModal.classList.contains(
-                "open"
-            )
-        ) {
-
-            closeEditProfileModal();
-
-        }
-
+    if (
+        e.key === "Escape" &&
+        editProfileModal &&
+        editProfileModal.classList.contains("open")
+    ) {
+        closeEditProfileModal();
     }
-);
+
+});
 
 
 
 if (editAvatarInput) {
 
-    editAvatarInput.addEventListener(
-        "change",
-        function () {
+    editAvatarInput.addEventListener("change", function () {
 
-            const file =
-                editAvatarInput.files[0];
+        const file = editAvatarInput.files[0];
 
-            if (!file) return;
+        if (!file) return;
 
-            const reader =
-                new FileReader();
+        const reader = new FileReader();
 
-            reader.onload =
-                function (e) {
+        reader.onload = function (e) {
 
-                    editAvatarBase64 =
-                        e.target.result;
+            editAvatarBase64 = e.target.result;
 
-                    if (editAvatarPreview) {
+            if (editAvatarPreview) {
+                editAvatarPreview.innerHTML =
+                    '<img src="' + editAvatarBase64 + '" alt="">';
+            }
 
-                        editAvatarPreview.innerHTML =
-                            '<img src="' +
-                            editAvatarBase64 +
-                            '" alt="">';
+        };
 
-                    }
+        reader.readAsDataURL(file);
 
-                };
-
-            reader.readAsDataURL(file);
-
-        }
-    );
+    });
 
 }
 
@@ -1380,126 +879,52 @@ if (editAvatarInput) {
 
 if (editProfileForm) {
 
-    editProfileForm.addEventListener(
-        "submit",
-        function (e) {
+    editProfileForm.addEventListener("submit", function (e) {
 
-            e.preventDefault();
+        e.preventDefault();
 
+        const newName = document.getElementById("edit-name").value.trim();
+        const newEmail = document.getElementById("edit-email").value.trim();
+        const newBio = document.getElementById("edit-bio").value.trim();
+        const newPassword = document.getElementById("edit-password");
 
-            const newName =
-                document.getElementById(
-                    "edit-name"
-                ).value.trim();
+        const oldEmail = localStorage.getItem("userEmail") || "";
 
-            const newEmail =
-                document.getElementById(
-                    "edit-email"
-                ).value.trim();
+        localStorage.setItem("userName", newName);
+        localStorage.setItem("userEmail", newEmail);
+        localStorage.setItem("userBio", newBio);
 
-            const newBio =
-                document.getElementById(
-                    "edit-bio"
-                ).value.trim();
+        if (editAvatarBase64) {
+            localStorage.setItem("userAvatar", editAvatarBase64);
+        }
 
-            const newPassword =
-                document.getElementById(
-                    "edit-password"
-                );
+        if (oldEmail && newEmail && oldEmail !== newEmail) {
 
+            const blogs = getBlogs().map(function (b) {
 
-            const oldEmail =
-                localStorage.getItem(
-                    "userEmail"
-                ) || "";
+                if (b.authorEmail === oldEmail) {
+                    return Object.assign({}, b, { authorEmail: newEmail });
+                }
 
+                return b;
 
-            localStorage.setItem(
-                "userName",
-                newName
-            );
+            });
 
-            localStorage.setItem(
-                "userEmail",
-                newEmail
-            );
-
-            localStorage.setItem(
-                "userBio",
-                newBio
-            );
-
-
-            if (editAvatarBase64) {
-
-                localStorage.setItem(
-                    "userAvatar",
-                    editAvatarBase64
-                );
-
-            }
-
-
-            if (
-                oldEmail &&
-                newEmail &&
-                oldEmail !== newEmail
-            ) {
-
-                const blogs =
-                    getBlogs().map(
-                        function (b) {
-
-                            if (
-                                b.authorEmail ===
-                                oldEmail
-                            ) {
-
-                                return Object.assign(
-                                    {},
-                                    b,
-                                    {
-                                        authorEmail:
-                                            newEmail
-                                    }
-                                );
-
-                            }
-
-                            return b;
-
-                        }
-                    );
-
-                saveBlogs(blogs);
-
-            }
-
-
-            if (
-                newPassword &&
-                newPassword.value.trim()
-            ) {
-
-                localStorage.setItem(
-                    "userPassword",
-                    newPassword.value.trim()
-                );
-
-            }
-
-
-            closeEditProfileModal();
-
-            updateAuthUI();
-
-            showToast(
-                "Profile updated!",
-                "success"
-            );
+            saveBlogs(blogs);
 
         }
-    );
+
+        if (newPassword && newPassword.value.trim()) {
+            localStorage.setItem("userPassword", newPassword.value.trim());
+        }
+
+        closeEditProfileModal();
+
+        updateAuthUI();
+
+        showToast("Profile updated!", "success");
+
+    });
 
 }
 
@@ -1509,75 +934,38 @@ if (editProfileForm) {
 // 12. WELCOME SCREEN
 // =====================================================================
 
-const primaryAuthBtn =
-    document.getElementById(
-        "primary-auth-btn"
-    );
-
-const secondaryAuthBtn =
-    document.getElementById(
-        "secondary-auth-btn"
-    );
-
-const welcomeSubtext =
-    document.getElementById(
-        "welcome-subtext"
-    );
+const primaryAuthBtn = document.getElementById("primary-auth-btn");
+const secondaryAuthBtn = document.getElementById("secondary-auth-btn");
+const welcomeSubtext = document.getElementById("welcome-subtext");
 
 
-if (
-    primaryAuthBtn &&
-    secondaryAuthBtn
-) {
+if (primaryAuthBtn && secondaryAuthBtn) {
 
-    const hasAccount =
-        !!localStorage.getItem(
-            "userEmail"
-        );
-
+    const hasAccount = !!localStorage.getItem("userEmail");
 
     if (hasAccount) {
 
-        primaryAuthBtn.href =
-            "login.html";
+        primaryAuthBtn.href = "login.html";
+        primaryAuthBtn.innerText = "Log in";
 
-        primaryAuthBtn.innerText =
-            "Log in";
-
-        secondaryAuthBtn.href =
-            "register.html";
-
-        secondaryAuthBtn.innerText =
-            "Sign up";
-
+        secondaryAuthBtn.href = "register.html";
+        secondaryAuthBtn.innerText = "Sign up";
 
         if (welcomeSubtext) {
-
-            welcomeSubtext.innerText =
-                "Welcome back! Log in to continue.";
-
+            welcomeSubtext.innerText = "Welcome back! Log in to continue.";
         }
 
     } else {
 
-        primaryAuthBtn.href =
-            "register.html";
+        primaryAuthBtn.href = "register.html";
+        primaryAuthBtn.innerText = "Sign up";
 
-        primaryAuthBtn.innerText =
-            "Sign up";
-
-        secondaryAuthBtn.href =
-            "login.html";
-
-        secondaryAuthBtn.innerText =
-            "Log in";
-
+        secondaryAuthBtn.href = "login.html";
+        secondaryAuthBtn.innerText = "Log in";
 
         if (welcomeSubtext) {
-
             welcomeSubtext.innerText =
                 "New here? Create an account to get started.";
-
         }
 
     }
@@ -1590,304 +978,199 @@ if (
 // 13. LOGOUT
 // =====================================================================
 
-document
-    .querySelectorAll(".logout-link")
-    .forEach(function (btn) {
+document.querySelectorAll(".logout-link").forEach(function (btn) {
 
-        btn.addEventListener(
-            "click",
-            function () {
+    btn.addEventListener("click", function () {
 
-                localStorage.removeItem(
-                    "isLoggedIn"
-                );
+        localStorage.removeItem("isLoggedIn");
 
-                showToast(
-                    "Logged out.",
-                    "info"
-                );
+        showToast("Logged out.", "info");
 
-                setTimeout(
-                    function () {
-
-                        navigateTo(
-                            "home.html"
-                        );
-
-                    },
-                    1300
-                );
-
-            }
-        );
+        setTimeout(function () {
+            navigateTo("home.html");
+        }, 1300);
 
     });
 
+});
+
 
 
 // =====================================================================
-// 14. REGISTER
+// 13b. BACKEND API HELPER
+// The backend (Express) must be running: node server.js
 // =====================================================================
 
-const registerForm =
-    document.getElementById(
-        "register-form"
-    );
+const API_URL = "http://localhost:3000";
 
 
-if (registerForm) {
+async function apiPost(path, body) {
 
-    registerForm.addEventListener(
-        "submit",
-        function (e) {
+    try {
 
-            e.preventDefault();
+        const response = await fetch(API_URL + path, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body)
+        });
 
+        let data = {};
 
-            const name =
-                document.getElementById(
-                    "name"
-                ).value;
-
-            const email =
-                document.getElementById(
-                    "email"
-                ).value;
-
-            const password =
-                document.getElementById(
-                    "password"
-                ).value;
-
-            const confirm =
-                document.getElementById(
-                    "confirm-password"
-                ).value;
-
-
-            if (
-                password !== confirm
-            ) {
-
-                showToast(
-                    "Passwords do not match.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            localStorage.setItem(
-                "userName",
-                name
-            );
-
-            localStorage.setItem(
-                "userEmail",
-                email
-            );
-
-
-            if (
-                !localStorage.getItem(
-                    "userJoinDate"
-                )
-            ) {
-
-                localStorage.setItem(
-                    "userJoinDate",
-                    new Date().toLocaleDateString(
-                        "en-US",
-                        {
-                            month: "short",
-                            year: "numeric"
-                        }
-                    )
-                );
-
-            }
-
-
-            localStorage.setItem(
-                "userPassword",
-                password
-            );
-
-
-            showToast(
-                "Account created! Please log in.",
-                "success"
-            );
-
-
-            registerForm.reset();
-
-
-            setTimeout(
-                function () {
-
-                    navigateTo(
-                        "login.html"
-                    );
-
-                },
-                2100
-            );
-
+        try {
+            data = await response.json();
+        } catch (err) {
+            data = {};
         }
-    );
+
+        return { ok: response.ok, status: response.status, data: data };
+
+    } catch (error) {
+
+        return {
+            ok: false,
+            status: 0,
+            data: {
+                message:
+                    "Cannot reach the server. Please make sure the backend is running."
+            }
+        };
+
+    }
+
+}
+
+
+function formatJoinDate(isoDate) {
+
+    const date = isoDate ? new Date(isoDate) : new Date();
+
+    return date.toLocaleDateString("en-US", {
+        month: "short",
+        year: "numeric"
+    });
 
 }
 
 
 
 // =====================================================================
-// 15. LOGIN
+// 14. REGISTER (uses POST /api/register)
 // =====================================================================
 
-const loginForm =
-    document.getElementById(
-        "login-form"
-    );
+const registerForm = document.getElementById("register-form");
+
+
+if (registerForm) {
+
+    registerForm.addEventListener("submit", async function (e) {
+
+        e.preventDefault();
+
+        const name = document.getElementById("name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+        const confirm = document.getElementById("confirm-password").value;
+
+        if (password !== confirm) {
+            showToast("Passwords do not match.", "error");
+            return;
+        }
+
+        const submitBtn = registerForm.querySelector('button[type="submit"]');
+
+        if (submitBtn) submitBtn.disabled = true;
+
+        const result = await apiPost("/api/register", {
+            name: name,
+            email: email,
+            password: password
+        });
+
+        if (submitBtn) submitBtn.disabled = false;
+
+        if (!result.ok) {
+            showToast(
+                result.data.message || "Registration failed. Please try again.",
+                "error"
+            );
+            return;
+        }
+
+        const user = result.data.user;
+
+        localStorage.setItem("userName", user.name);
+        localStorage.setItem("userEmail", user.email);
+        localStorage.setItem("userJoinDate", formatJoinDate(user.createdAt));
+
+        // The password is never kept in the browser any more
+        localStorage.removeItem("userPassword");
+
+        showToast("Account created! Please log in.", "success");
+
+        registerForm.reset();
+
+        setTimeout(function () {
+            navigateTo("login.html");
+        }, 2100);
+
+    });
+
+}
+
+
+
+// =====================================================================
+// 15. LOGIN (uses POST /api/login)
+// =====================================================================
+
+const loginForm = document.getElementById("login-form");
 
 
 if (loginForm) {
 
-    loginForm.addEventListener(
-        "submit",
-        function (e) {
+    loginForm.addEventListener("submit", async function (e) {
 
-            e.preventDefault();
+        e.preventDefault();
 
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
 
-            const email =
-                document.getElementById(
-                    "email"
-                ).value;
+        const submitBtn = loginForm.querySelector('button[type="submit"]');
 
-            const password =
-                document.getElementById(
-                    "password"
-                ).value;
+        if (submitBtn) submitBtn.disabled = true;
 
+        const result = await apiPost("/api/login", {
+            email: email,
+            password: password
+        });
 
-            const savedEmail =
-                localStorage.getItem(
-                    "userEmail"
-                );
+        if (submitBtn) submitBtn.disabled = false;
 
-
-            const savedPassword =
-                localStorage.getItem(
-                    "userPassword"
-                );
-
-
-            const isDemoAccount =
-                email ===
-                    "test@example.com" &&
-                password ===
-                    "123456";
-
-
-            const isRegisteredAccount =
-                savedEmail &&
-                email === savedEmail &&
-                (
-                    !savedPassword ||
-                    password === savedPassword
-                );
-
-
-            if (
-                isDemoAccount ||
-                isRegisteredAccount
-            ) {
-
-                localStorage.setItem(
-                    "isLoggedIn",
-                    "true"
-                );
-
-
-                if (
-                    !localStorage.getItem(
-                        "userName"
-                    )
-                ) {
-
-                    localStorage.setItem(
-                        "userName",
-                        "Test User"
-                    );
-
-                }
-
-
-                if (
-                    !localStorage.getItem(
-                        "userEmail"
-                    )
-                ) {
-
-                    localStorage.setItem(
-                        "userEmail",
-                        email
-                    );
-
-                }
-
-
-                if (
-                    !localStorage.getItem(
-                        "userJoinDate"
-                    )
-                ) {
-
-                    localStorage.setItem(
-                        "userJoinDate",
-                        new Date().toLocaleDateString(
-                            "en-US",
-                            {
-                                month: "short",
-                                year: "numeric"
-                            }
-                        )
-                    );
-
-                }
-
-
-                showToast(
-                    "Login successful!",
-                    "success"
-                );
-
-
-                setTimeout(
-                    function () {
-
-                        navigateTo(
-                            "home.html"
-                        );
-
-                    },
-                    1700
-                );
-
-            } else {
-
-                showToast(
-                    "Invalid email or password. New here? Sign up first.",
-                    "error"
-                );
-
-            }
-
+        if (!result.ok) {
+            showToast(
+                result.data.message || "Login failed. Please try again.",
+                "error"
+            );
+            return;
         }
-    );
+
+        const user = result.data.user;
+
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("userName", user.name);
+        localStorage.setItem("userEmail", user.email);
+        localStorage.setItem("userJoinDate", formatJoinDate(user.createdAt));
+
+        // The password is never kept in the browser any more
+        localStorage.removeItem("userPassword");
+
+        showToast("Login successful!", "success");
+
+        setTimeout(function () {
+            navigateTo("home.html");
+        }, 1700);
+
+    });
 
 }
 
@@ -1899,74 +1182,42 @@ if (loginForm) {
 
 function initBgSlideshow(containerId) {
 
-    const container =
-        document.getElementById(
-            containerId
-        );
+    const container = document.getElementById(containerId);
 
     if (!container) return;
 
+    WRITING_PHOTO_IDS.forEach(function (photoId, i) {
 
-    WRITING_PHOTO_IDS.forEach(
-        function (photoId, i) {
+        const img = document.createElement("img");
 
-            const img =
-                document.createElement(
-                    "img"
-                );
+        img.src =
+            "https://images.unsplash.com/photo-" +
+            photoId +
+            "?auto=format&fit=crop&w=1600&h=900&q=70";
 
-            img.src =
-                "https://images.unsplash.com/photo-" +
-                photoId +
-                "?auto=format&fit=crop&w=1600&h=900&q=70";
-
-
-            if (i === 0) {
-
-                img.className =
-                    "active";
-
-            }
-
-
-            container.appendChild(img);
-
+        if (i === 0) {
+            img.className = "active";
         }
-    );
 
+        container.appendChild(img);
+
+    });
 
     let current = 0;
 
+    setInterval(function () {
 
-    setInterval(
-        function () {
+        const imgs = container.querySelectorAll("img");
 
-            const imgs =
-                container.querySelectorAll(
-                    "img"
-                );
+        if (!imgs.length) return;
 
+        imgs[current].classList.remove("active");
 
-            if (!imgs.length) return;
+        current = (current + 1) % imgs.length;
 
+        imgs[current].classList.add("active");
 
-            imgs[current].classList.remove(
-                "active"
-            );
-
-
-            current =
-                (current + 1) %
-                imgs.length;
-
-
-            imgs[current].classList.add(
-                "active"
-            );
-
-        },
-        4500
-    );
+    }, 4500);
 
 }
 
@@ -1979,15 +1230,10 @@ function initBgSlideshow(containerId) {
 const WRITER_QUOTES = [
 
     "Here's what you've published so far.",
-
     "Every great post starts with a single sentence.",
-
     "Small consistent writing beats occasional bursts.",
-
     "Your ideas deserve to be read — keep going.",
-
     "The best time to write was yesterday. The next best time is now.",
-
     "One more paragraph today is progress."
 
 ];
@@ -1995,48 +1241,27 @@ const WRITER_QUOTES = [
 
 function initRotatingQuote(elementId) {
 
-    const el =
-        document.getElementById(
-            elementId
-        );
+    const el = document.getElementById(elementId);
 
     if (!el) return;
 
-
     let index = 0;
 
+    setInterval(function () {
 
-    setInterval(
-        function () {
+        el.classList.add("fade-out");
 
-            el.classList.add(
-                "fade-out"
-            );
+        setTimeout(function () {
 
+            index = (index + 1) % WRITER_QUOTES.length;
 
-            setTimeout(
-                function () {
+            el.innerText = WRITER_QUOTES[index];
 
-                    index =
-                        (index + 1) %
-                        WRITER_QUOTES.length;
+            el.classList.remove("fade-out");
 
+        }, 600);
 
-                    el.innerText =
-                        WRITER_QUOTES[index];
-
-
-                    el.classList.remove(
-                        "fade-out"
-                    );
-
-                },
-                600
-            );
-
-        },
-        4000
-    );
+    }, 4000);
 
 }
 
@@ -2046,84 +1271,43 @@ function initRotatingQuote(elementId) {
 // 18. HOME PAGE
 // =====================================================================
 
-const homeBlogGrid =
-    document.getElementById(
-        "home-blog-grid"
-    );
+const homeBlogGrid = document.getElementById("home-blog-grid");
 
 
 if (homeBlogGrid) {
 
-    const blogs =
-        getBlogs().filter(
-            function (b) {
-
-                return (
-                    b.status ===
-                    "Published"
-                );
-
-            }
-        );
-
+    const blogs = getBlogs().filter(function (b) {
+        return b.status === "Published";
+    });
 
     homeBlogGrid.innerHTML =
         blogs.length === 0
-
             ? '<p class="empty-state">No posts yet. Be the first to write one!</p>'
-
-            : blogs
-                .map(blogCardHTML)
-                .join("");
+            : blogs.map(blogCardHTML).join("");
 
 }
 
 
 
-const myHomeGrid =
-    document.getElementById(
-        "my-home-grid"
-    );
+const myHomeGrid = document.getElementById("my-home-grid");
 
 
 if (myHomeGrid) {
 
-    initBgSlideshow(
-        "home-bg-slideshow"
-    );
+    initBgSlideshow("home-bg-slideshow");
 
-    initRotatingQuote(
-        "rotating-quote"
-    );
+    initRotatingQuote("rotating-quote");
 
+    const email = localStorage.getItem("userEmail") || "";
 
-    const email =
-        localStorage.getItem(
-            "userEmail"
-        ) || "";
-
-
-    const mine =
-        getBlogs().filter(
-            function (b) {
-
-                return (
-                    b.authorEmail === email &&
-                    b.status === "Published"
-                );
-
-            }
-        );
-
+    const mine = getBlogs().filter(function (b) {
+        return b.authorEmail === email && b.status === "Published";
+    });
 
     myHomeGrid.innerHTML =
         mine.length === 0
-
             ? '<p class="empty-state">You haven\'t published anything yet. <a href="create-blog.html">Write your first post →</a></p>'
-
-            : mine
-                .map(blogCardHTML)
-                .join("");
+            : mine.map(blogCardHTML).join("");
 
 }
 
@@ -2133,89 +1317,43 @@ if (myHomeGrid) {
 // 19. COUNT ANIMATION
 // =====================================================================
 
-document
-    .querySelectorAll(".count")
-    .forEach(function (el) {
+document.querySelectorAll(".count").forEach(function (el) {
 
-        const target =
-            parseFloat(
-                el.dataset.target
-            );
+    const target = parseFloat(el.dataset.target);
+    const decimals = parseInt(el.dataset.decimals || "0", 10);
+    const suffix = el.dataset.suffix || "";
+    const duration = 1600;
 
-        const decimals =
-            parseInt(
-                el.dataset.decimals ||
-                "0",
-                10
-            );
+    function start() {
 
-        const suffix =
-            el.dataset.suffix || "";
+        const t0 = performance.now();
 
-        const duration = 1600;
+        function tick(now) {
 
+            const p = Math.min((now - t0) / duration, 1);
 
-        function start() {
+            const val = target * (1 - Math.pow(1 - p, 3));
 
-            const t0 =
-                performance.now();
+            el.textContent =
+                (
+                    decimals
+                        ? val.toFixed(decimals)
+                        : Math.round(val).toLocaleString()
+                ) + suffix;
 
-
-            function tick(now) {
-
-                const p =
-                    Math.min(
-                        (now - t0) /
-                        duration,
-                        1
-                    );
-
-
-                const val =
-                    target *
-                    (
-                        1 -
-                        Math.pow(
-                            1 - p,
-                            3
-                        )
-                    );
-
-
-                el.textContent =
-                    (
-                        decimals
-                            ? val.toFixed(decimals)
-                            : Math.round(val)
-                                .toLocaleString()
-                    ) +
-                    suffix;
-
-
-                if (p < 1) {
-
-                    requestAnimationFrame(
-                        tick
-                    );
-
-                }
-
+            if (p < 1) {
+                requestAnimationFrame(tick);
             }
-
-
-            requestAnimationFrame(
-                tick
-            );
 
         }
 
+        requestAnimationFrame(tick);
 
-        setTimeout(
-            start,
-            900
-        );
+    }
 
-    });
+    setTimeout(start, 900);
+
+});
 
 
 
@@ -2224,57 +1362,26 @@ document
 // =====================================================================
 
 let dashMasterList = [];
-
-let currentStatusFilter =
-    "all";
-
-let chartsRendered =
-    false;
+let currentStatusFilter = "all";
+let chartsRendered = false;
 
 
 
 function populateCategoryFilter(list) {
 
-    const select =
-        document.getElementById(
-            "filter-category"
-        );
+    const select = document.getElementById("filter-category");
 
     if (!select) return;
 
-
-    const categories =
-        Array.from(
-            new Set(
-                list.map(
-                    function (b) {
-
-                        return b.category;
-
-                    }
-                )
-            )
-        ).sort();
-
+    const categories = Array.from(
+        new Set(list.map(function (b) { return b.category; }))
+    ).sort();
 
     select.innerHTML =
         '<option value="all">All Categories</option>' +
-
-        categories
-            .map(
-                function (c) {
-
-                    return (
-                        '<option value="' +
-                        c +
-                        '">' +
-                        c +
-                        "</option>"
-                    );
-
-                }
-            )
-            .join("");
+        categories.map(function (c) {
+            return '<option value="' + c + '">' + c + "</option>";
+        }).join("");
 
 }
 
@@ -2282,36 +1389,22 @@ function populateCategoryFilter(list) {
 
 function publishedThisMonth(list) {
 
-    const now =
-        new Date();
+    const now = new Date();
 
+    return list.filter(function (b) {
 
-    return list.filter(
-        function (b) {
-
-            if (
-                b.status !==
-                "Published"
-            ) {
-
-                return false;
-
-            }
-
-
-            const d =
-                new Date(b.date);
-
-
-            return (
-                d.getMonth() ===
-                    now.getMonth() &&
-                d.getFullYear() ===
-                    now.getFullYear()
-            );
-
+        if (b.status !== "Published") {
+            return false;
         }
-    ).length;
+
+        const d = new Date(b.date);
+
+        return (
+            d.getMonth() === now.getMonth() &&
+            d.getFullYear() === now.getFullYear()
+        );
+
+    }).length;
 
 }
 
@@ -2319,190 +1412,78 @@ function publishedThisMonth(list) {
 
 function renderDashStats(list) {
 
-    const published =
-        list.filter(
-            function (b) {
+    const published = list.filter(function (b) {
+        return b.status === "Published";
+    });
 
-                return (
-                    b.status ===
-                    "Published"
-                );
+    const drafts = list.filter(function (b) {
+        return b.status === "Draft";
+    }).length;
 
-            }
-        );
-
-
-    const drafts =
-        list.filter(
-            function (b) {
-
-                return (
-                    b.status ===
-                    "Draft"
-                );
-
-            }
-        ).length;
-
-
-    const totalViews =
-        published.reduce(
-            function (sum, b) {
-
-                return (
-                    sum +
-                    (b.views || 0)
-                );
-
-            },
-            0
-        );
-
+    const totalViews = published.reduce(function (sum, b) {
+        return sum + (b.views || 0);
+    }, 0);
 
     let avgText = "—";
 
-
     if (list.length) {
 
-        const avgSec =
-            Math.round(
-                list.reduce(
-                    function (s, b) {
-
-                        return (
-                            s +
-                            wordCount(
-                                b.content
-                            ) /
-                            200 *
-                            60
-                        );
-
-                    },
-                    0
-                ) /
-                list.length
-            );
-
+        const avgSec = Math.round(
+            list.reduce(function (s, b) {
+                return s + wordCount(b.content) / 200 * 60;
+            }, 0) / list.length
+        );
 
         avgText =
-            Math.floor(
-                avgSec / 60
-            ) +
+            Math.floor(avgSec / 60) +
             "m " +
-            String(
-                avgSec % 60
-            ).padStart(2, "0") +
+            String(avgSec % 60).padStart(2, "0") +
             "s";
 
     }
 
+    const readTimeEl = document.getElementById("stat-readtime");
+    const publishedEl = document.getElementById("stat-published");
+    const draftsEl = document.getElementById("stat-drafts");
+    const viewsEl = document.getElementById("stat-views");
 
-    const readTimeEl =
-        document.getElementById(
-            "stat-readtime"
-        );
+    if (readTimeEl) readTimeEl.innerText = avgText;
+    if (publishedEl) publishedEl.innerText = published.length;
+    if (draftsEl) draftsEl.innerText = drafts;
+    if (viewsEl) viewsEl.innerText = totalViews;
 
-    const publishedEl =
-        document.getElementById(
-            "stat-published"
-        );
-
-    const draftsEl =
-        document.getElementById(
-            "stat-drafts"
-        );
-
-    const viewsEl =
-        document.getElementById(
-            "stat-views"
-        );
-
-
-    if (readTimeEl)
-        readTimeEl.innerText =
-            avgText;
-
-    if (publishedEl)
-        publishedEl.innerText =
-            published.length;
-
-    if (draftsEl)
-        draftsEl.innerText =
-            drafts;
-
-    if (viewsEl)
-        viewsEl.innerText =
-            totalViews;
-
-
-    const pubTrend =
-        document.getElementById(
-            "stat-published-trend"
-        );
-
-    const viewsTrend =
-        document.getElementById(
-            "stat-views-trend"
-        );
-
+    const pubTrend = document.getElementById("stat-published-trend");
+    const viewsTrend = document.getElementById("stat-views-trend");
 
     if (pubTrend) {
-
-        pubTrend.innerText =
-            "▲ " +
-            publishedThisMonth(list) +
-            " this month";
-
+        pubTrend.innerText = "▲ " + publishedThisMonth(list) + " this month";
     }
 
-
     if (viewsTrend) {
-
         viewsTrend.innerText =
             "across " +
             published.length +
             " published post" +
-            (
-                published.length === 1
-                    ? ""
-                    : "s"
-            );
-
+            (published.length === 1 ? "" : "s");
     }
 
-
-    const statsLine =
-        document.getElementById(
-            "dash-stats"
-        );
-
+    const statsLine = document.getElementById("dash-stats");
 
     if (statsLine) {
 
         statsLine.innerText =
             list.length === 0
-
                 ? "You haven't published anything yet — create your first post!"
-
                 : "You have " +
                   list.length +
                   " post" +
-                  (
-                      list.length > 1
-                          ? "s"
-                          : ""
-                  ) +
+                  (list.length > 1 ? "s" : "") +
                   " — " +
                   published.length +
                   " published, " +
                   drafts +
                   " draft" +
-                  (
-                      drafts !== 1
-                          ? "s"
-                          : ""
-                  ) +
+                  (drafts !== 1 ? "s" : "") +
                   ".";
 
     }
@@ -2517,375 +1498,154 @@ function renderDashStats(list) {
 
 function renderCharts(list) {
 
-    const chart =
-        document.getElementById(
-            "bar-chart"
-        );
+    const chart = document.getElementById("bar-chart");
+    const labels = document.getElementById("bar-labels");
 
-    const labels =
-        document.getElementById(
-            "bar-labels"
-        );
+    if (!chart || !labels) return;
 
+    const published = list.filter(function (b) {
+        return b.status === "Published";
+    });
 
-    if (!chart || !labels)
-        return;
+    const totalViews = published.reduce(function (s, b) {
+        return s + (b.views || 0);
+    }, 0);
 
+    const weights = [8, 10, 9, 13, 11, 14, 13, 22];
 
-    const published =
-        list.filter(
-            function (b) {
-
-                return (
-                    b.status ===
-                    "Published"
-                );
-
-            }
-        );
-
-
-    const totalViews =
-        published.reduce(
-            function (s, b) {
-
-                return (
-                    s +
-                    (b.views || 0)
-                );
-
-            },
-            0
-        );
-
-
-    const weights =
-        [8, 10, 9, 13, 11, 14, 13, 22];
-
-
-    const wSum =
-        weights.reduce(
-            function (a, b) {
-
-                return a + b;
-
-            },
-            0
-        );
-
+    const wSum = weights.reduce(function (a, b) {
+        return a + b;
+    }, 0);
 
     let values;
 
-
     if (totalViews > 0) {
 
-        values =
-            weights.map(
-                function (w) {
-
-                    return Math.round(
-                        totalViews *
-                        w /
-                        wSum
-                    );
-
-                }
-            );
+        values = weights.map(function (w) {
+            return Math.round(totalViews * w / wSum);
+        });
 
     } else {
 
-        values =
-            [
-                22,
-                34,
-                26,
-                48,
-                38,
-                55,
-                44,
-                70
-            ];
+        values = [22, 34, 26, 48, 38, 55, 44, 70];
 
     }
 
-
-    const max =
-        Math.max.apply(
-            null,
-            values.concat([1])
-        );
-
+    const max = Math.max.apply(null, values.concat([1]));
 
     chart.innerHTML = "";
-
     labels.innerHTML = "";
 
+    values.forEach(function (v, i) {
 
-    values.forEach(
-        function (v, i) {
+        const bar = document.createElement("div");
 
-            const bar =
-                document.createElement(
-                    "div"
-                );
+        const isLast = i === values.length - 1;
 
+        bar.className = "bar" + (isLast ? " highlight" : "");
 
-            const isLast =
-                i ===
-                values.length - 1;
+        bar.setAttribute(
+            "data-val",
+            totalViews > 0 ? v + " views" : "waiting for views"
+        );
 
+        bar.style.transitionDelay = (i * 60) + "ms";
 
-            bar.className =
-                "bar" +
-                (
-                    isLast
-                        ? " highlight"
-                        : ""
-                );
+        if (isLast) {
 
+            const signal = document.createElement("span");
+            signal.className = "bar-signal";
 
-            bar.setAttribute(
-                "data-val",
-                totalViews > 0
-                    ? v + " views"
-                    : "waiting for views"
-            );
-
-
-            bar.style.transitionDelay =
-                (i * 60) +
-                "ms";
-
-
-            if (isLast) {
-
-                const signal =
-                    document.createElement(
-                        "span"
-                    );
-
-                signal.className =
-                    "bar-signal";
-
-                bar.appendChild(
-                    signal
-                );
-
-            }
-
-
-            chart.appendChild(
-                bar
-            );
-
-
-            const lab =
-                document.createElement(
-                    "span"
-                );
-
-
-            lab.textContent =
-                "W" + (i + 1);
-
-
-            labels.appendChild(
-                lab
-            );
-
-
-            requestAnimationFrame(
-                function () {
-
-                    requestAnimationFrame(
-                        function () {
-
-                            bar.style.height =
-                                Math.max(
-                                    6,
-                                    (
-                                        v /
-                                        max
-                                    ) *
-                                    100
-                                ) +
-                                "%";
-
-                        }
-                    );
-
-                }
-            );
+            bar.appendChild(signal);
 
         }
-    );
 
+        chart.appendChild(bar);
 
-    const donut =
-        document.getElementById(
-            "donut"
-        );
+        const lab = document.createElement("span");
+        lab.textContent = "W" + (i + 1);
 
-    const legend =
-        document.getElementById(
-            "donut-legend"
-        );
+        labels.appendChild(lab);
 
+        requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+                bar.style.height = Math.max(6, (v / max) * 100) + "%";
+            });
+        });
 
-    if (!donut || !legend)
-        return;
+    });
 
+    const donut = document.getElementById("donut");
+    const legend = document.getElementById("donut-legend");
+
+    if (!donut || !legend) return;
 
     if (list.length === 0) {
 
-        donut.style.background =
-            "conic-gradient(#e8e0c9 0 100%)";
-
-        legend.innerHTML =
-            "<span>No categories yet</span>";
+        donut.style.background = "conic-gradient(#e8e0c9 0 100%)";
+        legend.innerHTML = "<span>No categories yet</span>";
 
         return;
 
     }
 
-
     const counts = {};
 
+    list.forEach(function (b) {
+        counts[b.category] = (counts[b.category] || 0) + 1;
+    });
 
-    list.forEach(
-        function (b) {
-
-            counts[b.category] =
-                (
-                    counts[b.category] ||
-                    0
-                ) + 1;
-
-        }
-    );
-
-
-    let entries =
-        Object.keys(counts)
-            .map(
-                function (k) {
-
-                    return [
-                        k,
-                        counts[k]
-                    ];
-
-                }
-            )
-            .sort(
-                function (a, b) {
-
-                    return b[1] - a[1];
-
-                }
-            );
-
+    let entries = Object.keys(counts)
+        .map(function (k) {
+            return [k, counts[k]];
+        })
+        .sort(function (a, b) {
+            return b[1] - a[1];
+        });
 
     if (entries.length > 4) {
 
-        const rest =
-            entries
-                .slice(4)
-                .reduce(
-                    function (s, e) {
+        const rest = entries.slice(4).reduce(function (s, e) {
+            return s + e[1];
+        }, 0);
 
-                        return (
-                            s + e[1]
-                        );
-
-                    },
-                    0
-                );
-
-
-        entries =
-            entries
-                .slice(0, 4)
-                .concat(
-                    [["Other", rest]]
-                );
+        entries = entries.slice(0, 4).concat([["Other", rest]]);
 
     }
 
-
-    const colors = [
-
-        "#2f4a3c",
-        "#c98a3f",
-        "#7ea27f",
-        "#a15c33",
-        "#8f8a76"
-
-    ];
-
+    const colors = ["#2f4a3c", "#c98a3f", "#7ea27f", "#a15c33", "#8f8a76"];
 
     let acc = 0;
 
     const stops = [];
 
+    entries.forEach(function (e, i) {
 
-    entries.forEach(
-        function (e, i) {
+        const pct = e[1] / list.length * 100;
 
-            const pct =
-                e[1] /
-                list.length *
-                100;
+        stops.push(colors[i] + " " + acc + "% " + (acc + pct) + "%");
 
+        acc += pct;
 
-            stops.push(
-                colors[i] +
-                " " +
-                acc +
-                "% " +
-                (
-                    acc + pct
-                ) +
-                "%"
-            );
+    });
 
+    donut.style.background = "conic-gradient(" + stops.join(",") + ")";
 
-            acc += pct;
+    legend.innerHTML = entries.map(function (e, i) {
 
-        }
-    );
+        return (
+            '<span>' +
+            '<i class="legend-dot" style="background:' +
+            colors[i] +
+            '"></i>' +
+            e[0] +
+            " (" +
+            Math.round(e[1] / list.length * 100) +
+            "%)" +
+            "</span>"
+        );
 
-
-    donut.style.background =
-        "conic-gradient(" +
-        stops.join(",") +
-        ")";
-
-
-    legend.innerHTML =
-        entries
-            .map(
-                function (e, i) {
-
-                    return (
-                        '<span>' +
-                        '<i class="legend-dot" style="background:' +
-                        colors[i] +
-                        '"></i>' +
-                        e[0] +
-                        " (" +
-                        Math.round(
-                            e[1] /
-                            list.length *
-                            100
-                        ) +
-                        "%)" +
-                        "</span>"
-                    );
-
-                }
-            )
-            .join("");
+    }).join("");
 
 }
 
@@ -2897,15 +1657,9 @@ function renderCharts(list) {
 
 function renderDashTable(list) {
 
-    const body =
-        document.getElementById(
-            "dash-table-body"
-        );
+    const body = document.getElementById("dash-table-body");
 
-
-    if (!body)
-        return;
-
+    if (!body) return;
 
     if (list.length === 0) {
 
@@ -2920,83 +1674,60 @@ function renderDashTable(list) {
 
     }
 
+    body.innerHTML = list.map(function (b) {
 
-    body.innerHTML =
-        list.map(
-            function (b) {
+        const badgeClass =
+            b.status === "Published" ? "status-published" : "status-draft";
 
-                const badgeClass =
-                    b.status === "Published"
-                        ? "status-published"
-                        : "status-draft";
+        const viewsDisplay = b.status === "Published" ? b.views : "—";
 
+        return `
 
-                const viewsDisplay =
-                    b.status === "Published"
-                        ? b.views
-                        : "—";
+            <tr data-id="${b.id}">
 
+                <td class="title-cell">
 
-                return `
+                    <a href="blog-detail.html?id=${b.id}">
+                        ${b.title}
+                    </a>
 
-                    <tr data-id="${b.id}">
+                </td>
 
-                        <td class="title-cell">
+                <td>
+                    <span class="status-badge ${badgeClass}">
+                        ${b.status}
+                    </span>
+                </td>
 
-                            <a
-                                href="blog-detail.html?id=${b.id}">
+                <td>
+                    ${b.date}
+                </td>
 
-                                ${b.title}
+                <td>
+                    ${viewsDisplay}
+                </td>
 
-                            </a>
+                <td>
 
-                        </td>
+                    <button
+                        class="action-edit"
+                        onclick="goToEdit('${b.id}')">
+                        Edit
+                    </button>
 
-                        <td>
+                    <button
+                        class="action-delete"
+                        onclick="deletePost('${b.id}')">
+                        Delete
+                    </button>
 
-                            <span
-                                class="status-badge ${badgeClass}">
+                </td>
 
-                                ${b.status}
+            </tr>
 
-                            </span>
+        `;
 
-                        </td>
-
-                        <td>
-                            ${b.date}
-                        </td>
-
-                        <td>
-                            ${viewsDisplay}
-                        </td>
-
-                        <td>
-
-                            <button
-                                class="action-edit"
-                                onclick="goToEdit('${b.id}')">
-
-                                Edit
-
-                            </button>
-
-                            <button
-                                class="action-delete"
-                                onclick="deletePost('${b.id}')">
-
-                                Delete
-
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-                `;
-
-            }
-        ).join("");
+    }).join("");
 
 }
 
@@ -3008,135 +1739,50 @@ function renderDashTable(list) {
 
 function applyDashFilters() {
 
-    const searchInput =
-        document.getElementById(
-            "search-title"
-        );
+    const searchInput = document.getElementById("search-title");
+    const categoryFilter = document.getElementById("filter-category");
+    const sortFilter = document.getElementById("filter-sort");
 
-    const categoryFilter =
-        document.getElementById(
-            "filter-category"
-        );
+    const term = searchInput ? searchInput.value.toLowerCase() : "";
+    const category = categoryFilter ? categoryFilter.value : "all";
+    const sort = sortFilter ? sortFilter.value : "newest";
 
-    const sortFilter =
-        document.getElementById(
-            "filter-sort"
-        );
+    let filtered = dashMasterList.filter(function (b) {
+        return b.title.toLowerCase().includes(term);
+    });
 
+    if (currentStatusFilter !== "all") {
 
-    const term =
-        searchInput
-            ? searchInput.value.toLowerCase()
-            : "";
-
-
-    const category =
-        categoryFilter
-            ? categoryFilter.value
-            : "all";
-
-
-    const sort =
-        sortFilter
-            ? sortFilter.value
-            : "newest";
-
-
-    let filtered =
-        dashMasterList.filter(
-            function (b) {
-
-                return b.title
-                    .toLowerCase()
-                    .includes(term);
-
-            }
-        );
-
-
-    if (
-        currentStatusFilter !==
-        "all"
-    ) {
-
-        filtered =
-            filtered.filter(
-                function (b) {
-
-                    return (
-                        b.status ===
-                        currentStatusFilter
-                    );
-
-                }
-            );
+        filtered = filtered.filter(function (b) {
+            return b.status === currentStatusFilter;
+        });
 
     }
-
 
     if (category !== "all") {
 
-        filtered =
-            filtered.filter(
-                function (b) {
-
-                    return (
-                        b.category ===
-                        category
-                    );
-
-                }
-            );
+        filtered = filtered.filter(function (b) {
+            return b.category === category;
+        });
 
     }
 
+    filtered = filtered.slice().sort(function (a, b) {
 
-    filtered =
-        filtered
-            .slice()
-            .sort(
-                function (a, b) {
+        if (sort === "views") {
+            return (b.views || 0) - (a.views || 0);
+        }
 
-                    if (
-                        sort ===
-                        "views"
-                    ) {
+        const da = new Date(a.date);
+        const db = new Date(b.date);
 
-                        return (
-                            (b.views || 0) -
-                            (a.views || 0)
-                        );
+        return sort === "oldest" ? da - db : db - da;
 
-                    }
+    });
 
+    renderDashTable(filtered);
 
-                    const da =
-                        new Date(a.date);
-
-                    const db =
-                        new Date(b.date);
-
-
-                    return (
-                        sort === "oldest"
-                            ? da - db
-                            : db - da
-                    );
-
-                }
-            );
-
-
-    renderDashTable(
-        filtered
-    );
-
-
-    const countEl =
-        document.getElementById(
-            "results-count"
-        );
-
+    const countEl = document.getElementById("results-count");
 
     if (countEl) {
 
@@ -3159,24 +1805,13 @@ function applyDashFilters() {
 
 function refreshDashboard() {
 
-    renderDashStats(
-        dashMasterList
-    );
-
+    renderDashStats(dashMasterList);
 
     if (chartsRendered) {
-
-        renderCharts(
-            dashMasterList
-        );
-
+        renderCharts(dashMasterList);
     }
 
-
-    populateCategoryFilter(
-        dashMasterList
-    );
-
+    populateCategoryFilter(dashMasterList);
 
     applyDashFilters();
 
@@ -3188,44 +1823,23 @@ function refreshDashboard() {
 // 25. STATUS CHIPS
 // =====================================================================
 
-document
-    .querySelectorAll(".status-chip")
-    .forEach(function (chip) {
+document.querySelectorAll(".status-chip").forEach(function (chip) {
 
-        chip.addEventListener(
-            "click",
-            function () {
+    chip.addEventListener("click", function () {
 
-                document
-                    .querySelectorAll(
-                        ".status-chip"
-                    )
-                    .forEach(
-                        function (c) {
+        document.querySelectorAll(".status-chip").forEach(function (c) {
+            c.classList.remove("active");
+        });
 
-                            c.classList.remove(
-                                "active"
-                            );
+        chip.classList.add("active");
 
-                        }
-                    );
+        currentStatusFilter = chip.dataset.status;
 
-
-                chip.classList.add(
-                    "active"
-                );
-
-
-                currentStatusFilter =
-                    chip.dataset.status;
-
-
-                applyDashFilters();
-
-            }
-        );
+        applyDashFilters();
 
     });
+
+});
 
 
 
@@ -3233,86 +1847,39 @@ document
 // 26. DASHBOARD SIDEBAR TAB SWITCHING
 // =====================================================================
 
-document
-    .querySelectorAll(".dash-tab")
-    .forEach(function (tab) {
+document.querySelectorAll(".dash-tab").forEach(function (tab) {
 
-        tab.addEventListener(
-            "click",
-            function () {
+    tab.addEventListener("click", function () {
 
+        document.querySelectorAll(".dash-tab").forEach(function (t) {
+            t.classList.remove("active");
+        });
 
-                document
-                    .querySelectorAll(
-                        ".dash-tab"
-                    )
-                    .forEach(
-                        function (t) {
+        document.querySelectorAll(".dash-panel").forEach(function (panel) {
+            panel.classList.remove("active");
+        });
 
-                            t.classList.remove(
-                                "active"
-                            );
+        tab.classList.add("active");
 
-                        }
-                    );
+        const panelId = tab.dataset.panel;
 
+        const targetPanel = document.getElementById(panelId);
 
-                document
-                    .querySelectorAll(
-                        ".dash-panel"
-                    )
-                    .forEach(
-                        function (panel) {
+        if (targetPanel) {
+            targetPanel.classList.add("active");
+        }
 
-                            panel.classList.remove(
-                                "active"
-                            );
+        if (panelId === "panel-analytics") {
 
-                        }
-                    );
+            chartsRendered = true;
 
+            renderCharts(dashMasterList);
 
-                tab.classList.add(
-                    "active"
-                );
-
-
-                const panelId =
-                    tab.dataset.panel;
-
-
-                const targetPanel =
-                    document.getElementById(
-                        panelId
-                    );
-
-
-                if (targetPanel) {
-
-                    targetPanel.classList.add(
-                        "active"
-                    );
-
-                }
-
-
-                if (
-                    panelId ===
-                    "panel-analytics"
-                ) {
-
-                    chartsRendered = true;
-
-                    renderCharts(
-                        dashMasterList
-                    );
-
-                }
-
-            }
-        );
+        }
 
     });
+
+});
 
 
 
@@ -3320,86 +1887,35 @@ document
 // 27. INITIALIZE DASHBOARD
 // =====================================================================
 
-const dashTableBody =
-    document.getElementById(
-        "dash-table-body"
-    );
+const dashTableBody = document.getElementById("dash-table-body");
 
 
 if (dashTableBody) {
 
-    initBgSlideshow(
-        "dash-bg-slideshow"
-    );
+    initBgSlideshow("dash-bg-slideshow");
 
+    const currentEmail = localStorage.getItem("userEmail") || "";
 
-    const currentEmail =
-        localStorage.getItem(
-            "userEmail"
-        ) || "";
-
-
-    dashMasterList =
-        getBlogs().filter(
-            function (b) {
-
-                return (
-                    b.authorEmail ===
-                    currentEmail
-                );
-
-            }
-        );
-
+    dashMasterList = getBlogs().filter(function (b) {
+        return b.authorEmail === currentEmail;
+    });
 
     refreshDashboard();
 
-
-    const searchInput =
-        document.getElementById(
-            "search-title"
-        );
-
-
-    const categoryFilter =
-        document.getElementById(
-            "filter-category"
-        );
-
-
-    const sortFilter =
-        document.getElementById(
-            "filter-sort"
-        );
-
+    const searchInput = document.getElementById("search-title");
+    const categoryFilter = document.getElementById("filter-category");
+    const sortFilter = document.getElementById("filter-sort");
 
     if (searchInput) {
-
-        searchInput.addEventListener(
-            "input",
-            applyDashFilters
-        );
-
+        searchInput.addEventListener("input", applyDashFilters);
     }
-
 
     if (categoryFilter) {
-
-        categoryFilter.addEventListener(
-            "change",
-            applyDashFilters
-        );
-
+        categoryFilter.addEventListener("change", applyDashFilters);
     }
 
-
     if (sortFilter) {
-
-        sortFilter.addEventListener(
-            "change",
-            applyDashFilters
-        );
-
+        sortFilter.addEventListener("change", applyDashFilters);
     }
 
 }
@@ -3412,10 +1928,7 @@ if (dashTableBody) {
 
 function goToEdit(id) {
 
-    navigateTo(
-        "create-blog.html?edit=" +
-        id
-    );
+    navigateTo("create-blog.html?edit=" + id);
 
 }
 
@@ -3428,33 +1941,18 @@ function goToEdit(id) {
 function deletePost(id) {
 
     saveBlogs(
-        getBlogs().filter(
-            function (b) {
-
-                return b.id !== id;
-
-            }
-        )
+        getBlogs().filter(function (b) {
+            return b.id !== id;
+        })
     );
 
-
-    dashMasterList =
-        dashMasterList.filter(
-            function (b) {
-
-                return b.id !== id;
-
-            }
-        );
-
+    dashMasterList = dashMasterList.filter(function (b) {
+        return b.id !== id;
+    });
 
     refreshDashboard();
 
-
-    showToast(
-        "Post deleted.",
-        "success"
-    );
+    showToast("Post deleted.", "success");
 
 }
 
@@ -3464,52 +1962,25 @@ function deletePost(id) {
 // 30. CREATE / EDIT BLOG
 // =====================================================================
 
-const coverUrlInput =
-    document.getElementById(
-        "cover-url"
-    );
+const coverUrlInput = document.getElementById("cover-url");
+const coverUploadInput = document.getElementById("cover-upload");
+const coverPreviewWrap = document.getElementById("cover-preview-wrap");
+const coverPreviewImg = document.getElementById("cover-preview");
+const coverRemoveBtn = document.getElementById("cover-remove");
 
-const coverUploadInput =
-    document.getElementById(
-        "cover-upload"
-    );
-
-const coverPreviewWrap =
-    document.getElementById(
-        "cover-preview-wrap"
-    );
-
-const coverPreviewImg =
-    document.getElementById(
-        "cover-preview"
-    );
-
-const coverRemoveBtn =
-    document.getElementById(
-        "cover-remove"
-    );
-
-let uploadedCoverBase64 =
-    null;
+let uploadedCoverBase64 = null;
 
 
 
 function showCoverPreview(src) {
 
-    if (!coverPreviewWrap)
-        return;
-
+    if (!coverPreviewWrap) return;
 
     if (coverPreviewImg) {
-
-        coverPreviewImg.src =
-            src;
-
+        coverPreviewImg.src = src;
     }
 
-
-    coverPreviewWrap.style.display =
-        "block";
+    coverPreviewWrap.style.display = "block";
 
 }
 
@@ -3517,19 +1988,12 @@ function showCoverPreview(src) {
 
 function hideCoverPreview() {
 
-    if (!coverPreviewWrap)
-        return;
+    if (!coverPreviewWrap) return;
 
-
-    coverPreviewWrap.style.display =
-        "none";
-
+    coverPreviewWrap.style.display = "none";
 
     if (coverPreviewImg) {
-
-        coverPreviewImg.src =
-            "";
-
+        coverPreviewImg.src = "";
     }
 
 }
@@ -3538,49 +2002,29 @@ function hideCoverPreview() {
 
 if (coverUploadInput) {
 
-    coverUploadInput.addEventListener(
-        "change",
-        function () {
+    coverUploadInput.addEventListener("change", function () {
 
-            const file =
-                coverUploadInput.files[0];
+        const file = coverUploadInput.files[0];
 
-            if (!file)
-                return;
+        if (!file) return;
 
+        const reader = new FileReader();
 
-            const reader =
-                new FileReader();
+        reader.onload = function (e) {
 
+            uploadedCoverBase64 = e.target.result;
 
-            reader.onload =
-                function (e) {
+            if (coverUrlInput) {
+                coverUrlInput.value = "";
+            }
 
-                    uploadedCoverBase64 =
-                        e.target.result;
+            showCoverPreview(uploadedCoverBase64);
 
+        };
 
-                    if (coverUrlInput) {
+        reader.readAsDataURL(file);
 
-                        coverUrlInput.value =
-                            "";
-
-                    }
-
-
-                    showCoverPreview(
-                        uploadedCoverBase64
-                    );
-
-                };
-
-
-            reader.readAsDataURL(
-                file
-            );
-
-        }
-    );
+    });
 
 }
 
@@ -3588,40 +2032,25 @@ if (coverUploadInput) {
 
 if (coverUrlInput) {
 
-    coverUrlInput.addEventListener(
-        "input",
-        function () {
+    coverUrlInput.addEventListener("input", function () {
 
-            if (
-                coverUrlInput.value.trim()
-            ) {
+        if (coverUrlInput.value.trim()) {
 
-                uploadedCoverBase64 =
-                    null;
+            uploadedCoverBase64 = null;
 
-
-                if (coverUploadInput) {
-
-                    coverUploadInput.value =
-                        "";
-
-                }
-
-
-                showCoverPreview(
-                    coverUrlInput.value.trim()
-                );
-
-            } else if (
-                !uploadedCoverBase64
-            ) {
-
-                hideCoverPreview();
-
+            if (coverUploadInput) {
+                coverUploadInput.value = "";
             }
 
+            showCoverPreview(coverUrlInput.value.trim());
+
+        } else if (!uploadedCoverBase64) {
+
+            hideCoverPreview();
+
         }
-    );
+
+    });
 
 }
 
@@ -3629,34 +2058,21 @@ if (coverUrlInput) {
 
 if (coverRemoveBtn) {
 
-    coverRemoveBtn.addEventListener(
-        "click",
-        function () {
+    coverRemoveBtn.addEventListener("click", function () {
 
-            uploadedCoverBase64 =
-                null;
+        uploadedCoverBase64 = null;
 
-
-            if (coverUrlInput) {
-
-                coverUrlInput.value =
-                    "";
-
-            }
-
-
-            if (coverUploadInput) {
-
-                coverUploadInput.value =
-                    "";
-
-            }
-
-
-            hideCoverPreview();
-
+        if (coverUrlInput) {
+            coverUrlInput.value = "";
         }
-    );
+
+        if (coverUploadInput) {
+            coverUploadInput.value = "";
+        }
+
+        hideCoverPreview();
+
+    });
 
 }
 
@@ -3666,10 +2082,7 @@ if (coverRemoveBtn) {
 // 31. RICH TEXT EDITOR
 // =====================================================================
 
-const richEditor =
-    document.getElementById(
-        "content"
-    );
+const richEditor = document.getElementById("content");
 
 
 if (richEditor) {
@@ -3679,20 +2092,10 @@ if (richEditor) {
 
     function saveSelection() {
 
-        const sel =
-            window.getSelection();
+        const sel = window.getSelection();
 
-
-        if (
-            sel.rangeCount > 0 &&
-            richEditor.contains(
-                sel.anchorNode
-            )
-        ) {
-
-            savedRange =
-                sel.getRangeAt(0);
-
+        if (sel.rangeCount > 0 && richEditor.contains(sel.anchorNode)) {
+            savedRange = sel.getRangeAt(0);
         }
 
     }
@@ -3700,20 +2103,13 @@ if (richEditor) {
 
     function restoreSelection() {
 
-        if (!savedRange)
-            return;
+        if (!savedRange) return;
 
-
-        const sel =
-            window.getSelection();
-
+        const sel = window.getSelection();
 
         sel.removeAllRanges();
 
-
-        sel.addRange(
-            savedRange
-        );
+        sel.addRange(savedRange);
 
     }
 
@@ -3721,143 +2117,87 @@ if (richEditor) {
     function updateToolbarState() {
 
         document
-            .querySelectorAll(
-                ".editor-toolbar-top button[data-cmd]"
-            )
-            .forEach(
-                function (btn) {
+            .querySelectorAll(".editor-toolbar-top button[data-cmd]")
+            .forEach(function (btn) {
 
-                    btn.classList.toggle(
-                        "active-cmd",
-                        document.queryCommandState(
-                            btn.dataset.cmd
-                        )
-                    );
+                btn.classList.toggle(
+                    "active-cmd",
+                    document.queryCommandState(btn.dataset.cmd)
+                );
 
-                }
-            );
+            });
 
     }
 
 
-    richEditor.addEventListener(
-        "mouseup",
-        function () {
+    richEditor.addEventListener("mouseup", function () {
+        saveSelection();
+        updateToolbarState();
+    });
 
-            saveSelection();
+    richEditor.addEventListener("keyup", function () {
+        saveSelection();
+        updateToolbarState();
+    });
 
-            updateToolbarState();
-
-        }
-    );
-
-
-    richEditor.addEventListener(
-        "keyup",
-        function () {
-
-            saveSelection();
-
-            updateToolbarState();
-
-        }
-    );
-
-
-    richEditor.addEventListener(
-        "focus",
-        saveSelection
-    );
+    richEditor.addEventListener("focus", saveSelection);
 
 
     document
-        .querySelectorAll(
-            ".editor-toolbar-top button[data-cmd]"
-        )
-        .forEach(
-            function (btn) {
+        .querySelectorAll(".editor-toolbar-top button[data-cmd]")
+        .forEach(function (btn) {
 
-                btn.addEventListener(
-                    "click",
-                    function () {
-
-                        richEditor.focus();
-
-                        restoreSelection();
-
-                        document.execCommand(
-                            btn.dataset.cmd,
-                            false,
-                            null
-                        );
-
-                        saveSelection();
-
-                        updateToolbarState();
-
-                    }
-                );
-
-            }
-        );
-
-
-    const fontFamilySelect =
-        document.getElementById(
-            "font-family-select"
-        );
-
-
-    const fontSizeSelect =
-        document.getElementById(
-            "font-size-select"
-        );
-
-
-    if (fontFamilySelect) {
-
-        fontFamilySelect.addEventListener(
-            "change",
-            function () {
+            btn.addEventListener("click", function () {
 
                 richEditor.focus();
 
                 restoreSelection();
 
-                document.execCommand(
-                    "fontName",
-                    false,
-                    fontFamilySelect.value
-                );
+                document.execCommand(btn.dataset.cmd, false, null);
 
                 saveSelection();
 
-            }
-        );
+                updateToolbarState();
+
+            });
+
+        });
+
+
+    const fontFamilySelect = document.getElementById("font-family-select");
+    const fontSizeSelect = document.getElementById("font-size-select");
+
+
+    if (fontFamilySelect) {
+
+        fontFamilySelect.addEventListener("change", function () {
+
+            richEditor.focus();
+
+            restoreSelection();
+
+            document.execCommand("fontName", false, fontFamilySelect.value);
+
+            saveSelection();
+
+        });
 
     }
 
 
     if (fontSizeSelect) {
 
-        fontSizeSelect.addEventListener(
-            "change",
-            function () {
+        fontSizeSelect.addEventListener("change", function () {
 
-                richEditor.focus();
+            richEditor.focus();
 
-                restoreSelection();
+            restoreSelection();
 
-                document.execCommand(
-                    "fontSize",
-                    false,
-                    fontSizeSelect.value
-                );
+            document.execCommand("fontSize", false, fontSizeSelect.value);
 
-                saveSelection();
+            saveSelection();
 
-            }
-        );
+        });
 
     }
 
@@ -3869,311 +2209,146 @@ if (richEditor) {
 // 32. CREATE BLOG FORM
 // =====================================================================
 
-const createBlogForm =
-    document.getElementById(
-        "create-blog-form"
-    );
+const createBlogForm = document.getElementById("create-blog-form");
 
 
 if (createBlogForm) {
 
-    initBgSlideshow(
-        "create-bg-slideshow"
-    );
+    initBgSlideshow("create-bg-slideshow");
 
+    const params = new URLSearchParams(window.location.search);
 
-    const params =
-        new URLSearchParams(
-            window.location.search
-        );
+    const editId = params.get("edit");
 
+    const pageTitle = document.getElementById("form-page-title");
 
-    const editId =
-        params.get("edit");
-
-
-    const pageTitle =
-        document.getElementById(
-            "form-page-title"
-        );
-
-
-    const submitBtn =
-        document.getElementById(
-            "form-submit-btn"
-        );
+    const submitBtn = document.getElementById("form-submit-btn");
 
 
     if (editId) {
 
-        const existing =
-            getBlogs().find(
-                function (b) {
-
-                    return b.id === editId;
-
-                }
-            );
-
+        const existing = getBlogs().find(function (b) {
+            return b.id === editId;
+        });
 
         if (existing) {
 
-            const titleInput =
-                document.getElementById(
-                    "title"
-                );
+            const titleInput = document.getElementById("title");
+            const categoryInput = document.getElementById("category");
 
+            if (titleInput) titleInput.value = existing.title;
 
-            const categoryInput =
-                document.getElementById(
-                    "category"
-                );
+            if (categoryInput) categoryInput.value = existing.category;
 
-
-            if (titleInput)
-                titleInput.value =
-                    existing.title;
-
-
-            if (categoryInput)
-                categoryInput.value =
-                    existing.category;
-
-
-            if (richEditor)
-                richEditor.innerHTML =
-                    existing.content;
-
+            if (richEditor) richEditor.innerHTML = existing.content;
 
             if (existing.coverImage) {
 
-                if (
-                    existing.coverImage.indexOf(
-                        "data:"
-                    ) === 0
-                ) {
+                if (existing.coverImage.indexOf("data:") === 0) {
 
-                    uploadedCoverBase64 =
-                        existing.coverImage;
+                    uploadedCoverBase64 = existing.coverImage;
 
-                } else if (
-                    coverUrlInput
-                ) {
+                } else if (coverUrlInput) {
 
-                    coverUrlInput.value =
-                        existing.coverImage;
+                    coverUrlInput.value = existing.coverImage;
 
                 }
 
-
-                showCoverPreview(
-                    existing.coverImage
-                );
+                showCoverPreview(existing.coverImage);
 
             }
 
+            if (pageTitle) pageTitle.innerText = "Edit your post";
 
-            if (pageTitle)
-                pageTitle.innerText =
-                    "Edit your post";
-
-
-            if (submitBtn)
-                submitBtn.innerText =
-                    "Save changes";
+            if (submitBtn) submitBtn.innerText = "Save changes";
 
         }
 
     }
 
 
-    createBlogForm.addEventListener(
-        "submit",
-        function (e) {
+    createBlogForm.addEventListener("submit", function (e) {
 
-            e.preventDefault();
+        e.preventDefault();
 
+        const title = document.getElementById("title").value;
 
-            const title =
-                document.getElementById(
-                    "title"
-                ).value;
+        const category = document.getElementById("category").value || "General";
 
+        const content = richEditor ? richEditor.innerHTML : "";
 
-            const category =
-                document.getElementById(
-                    "category"
-                ).value ||
-                "General";
+        if (!stripHtml(content).trim()) {
 
+            showToast("Please write some content before publishing.", "error");
 
-            const content =
-                richEditor
-                    ? richEditor.innerHTML
-                    : "";
-
-
-            if (
-                !stripHtml(
-                    content
-                ).trim()
-            ) {
-
-                showToast(
-                    "Please write some content before publishing.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            const coverImage =
-                uploadedCoverBase64 ||
-                (
-                    coverUrlInput &&
-                    coverUrlInput.value.trim()
-                ) ||
-                null;
-
-
-            const email =
-                localStorage.getItem(
-                    "userEmail"
-                ) ||
-                "guest@example.com";
-
-
-            let blogs =
-                getBlogs();
-
-
-            if (editId) {
-
-                blogs =
-                    blogs.map(
-                        function (b) {
-
-                            if (
-                                b.id ===
-                                editId
-                            ) {
-
-                                return Object.assign(
-                                    {},
-                                    b,
-                                    {
-                                        title:
-                                            title,
-
-                                        category:
-                                            category,
-
-                                        content:
-                                            content,
-
-                                        coverImage:
-                                            coverImage ||
-                                            b.coverImage ||
-                                            null
-                                    }
-                                );
-
-                            }
-
-
-                            return b;
-
-                        }
-                    );
-
-
-                saveBlogs(
-                    blogs
-                );
-
-
-                showToast(
-                    "Post updated!",
-                    "success"
-                );
-
-            } else {
-
-                blogs.push({
-
-                    id:
-                        getNextId(
-                            blogs
-                        ),
-
-                    title:
-                        title,
-
-                    category:
-                        category,
-
-                    content:
-                        content,
-
-                    coverImage:
-                        coverImage,
-
-                    date:
-                        new Date()
-                            .toLocaleDateString(
-                                "en-US",
-                                {
-                                    month:
-                                        "short",
-
-                                    day:
-                                        "numeric",
-
-                                    year:
-                                        "numeric"
-                                }
-                            ),
-
-                    views:
-                        0,
-
-                    status:
-                        "Published",
-
-                    authorEmail:
-                        email
-
-                });
-
-
-                saveBlogs(
-                    blogs
-                );
-
-
-                showToast(
-                    "Post published successfully!",
-                    "success"
-                );
-
-            }
-
-
-            setTimeout(
-                function () {
-
-                    navigateTo(
-                        "dashboard.html"
-                    );
-
-                },
-                1800
-            );
+            return;
 
         }
-    );
+
+        const coverImage =
+            uploadedCoverBase64 ||
+            (coverUrlInput && coverUrlInput.value.trim()) ||
+            null;
+
+        const email =
+            localStorage.getItem("userEmail") || "guest@example.com";
+
+        let blogs = getBlogs();
+
+        if (editId) {
+
+            blogs = blogs.map(function (b) {
+
+                if (b.id === editId) {
+
+                    return Object.assign({}, b, {
+                        title: title,
+                        category: category,
+                        content: content,
+                        coverImage: coverImage || b.coverImage || null
+                    });
+
+                }
+
+                return b;
+
+            });
+
+            saveBlogs(blogs);
+
+            showToast("Post updated!", "success");
+
+        } else {
+
+            blogs.push({
+
+                id: getNextId(blogs),
+                title: title,
+                category: category,
+                content: content,
+                coverImage: coverImage,
+                date: new Date().toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric"
+                }),
+                views: 0,
+                status: "Published",
+                authorEmail: email
+
+            });
+
+            saveBlogs(blogs);
+
+            showToast("Post published successfully!", "success");
+
+        }
+
+        setTimeout(function () {
+            navigateTo("dashboard.html");
+        }, 1800);
+
+    });
 
 }
 
@@ -4183,94 +2358,41 @@ if (createBlogForm) {
 // 33. BLOG DETAIL
 // =====================================================================
 
-const detailContainer =
-    document.getElementById(
-        "blog-detail-container"
-    );
+const detailContainer = document.getElementById("blog-detail-container");
 
 
 if (detailContainer) {
 
-    const params =
-        new URLSearchParams(
-            window.location.search
-        );
+    const params = new URLSearchParams(window.location.search);
 
+    const id = params.get("id");
 
-    const id =
-        params.get("id");
+    const blogs = getBlogs();
 
-
-    const blogs =
-        getBlogs();
-
-
-    const blog =
-        blogs.find(
-            function (b) {
-
-                return b.id === id;
-
-            }
-        );
+    const blog = blogs.find(function (b) {
+        return b.id === id;
+    });
 
 
     if (blog) {
 
-        const detailImg =
-            document.getElementById(
-                "detail-img"
-            );
-
-
-        const detailCategory =
-            document.getElementById(
-                "detail-category"
-            );
-
-
-        const detailTitle =
-            document.getElementById(
-                "detail-title"
-            );
-
-
-        const detailMeta =
-            document.getElementById(
-                "detail-meta"
-            );
-
-
-        const detailContent =
-            document.getElementById(
-                "detail-content"
-            );
-
+        const detailImg = document.getElementById("detail-img");
+        const detailCategory = document.getElementById("detail-category");
+        const detailTitle = document.getElementById("detail-title");
+        const detailMeta = document.getElementById("detail-meta");
+        const detailContent = document.getElementById("detail-content");
 
         if (detailImg) {
-
-            detailImg.src =
-                blog.coverImage ||
-                blogImage(blog.id);
-
+            detailImg.src = blog.coverImage || blogImage(blog.id);
         }
-
 
         if (detailCategory) {
-
-            detailCategory.innerText =
-                blog.category;
-
+            detailCategory.innerText = blog.category;
         }
-
 
         if (detailTitle) {
-
-            detailTitle.innerText =
-                blog.title;
-
+            detailTitle.innerText = blog.title;
         }
-
 
         if (detailMeta) {
 
@@ -4279,35 +2401,20 @@ if (detailContainer) {
                 " · " +
                 blog.views +
                 " views · " +
-                readTime(
-                    blog.content
-                ) +
+                readTime(blog.content) +
                 " min read";
 
         }
 
-
         if (detailContent) {
-
-            detailContent.innerHTML =
-                blog.content;
-
+            detailContent.innerHTML = blog.content;
         }
 
+        document.title = blog.title + " — Quillo";
 
-        document.title =
-            blog.title +
-            " — Quillo";
+        blog.views = (blog.views || 0) + 1;
 
-
-        blog.views =
-            (blog.views || 0) + 1;
-
-
-        saveBlogs(
-            blogs
-        );
-
+        saveBlogs(blogs);
 
     } else {
 

@@ -1,5 +1,5 @@
 // =====================================================================
-// QUİLLO - COMPLETE SCRIPT.JS (UPDATED: register + login use the backend)
+// QUİLLO - COMPLETE SCRIPT.JS (UPDATED: register, login and create post use the backend)
 // =====================================================================
 
 
@@ -1959,254 +1959,10 @@ function deletePost(id) {
 
 
 // =====================================================================
-// 30. CREATE / EDIT BLOG
-// =====================================================================
-
-const coverUrlInput = document.getElementById("cover-url");
-const coverUploadInput = document.getElementById("cover-upload");
-const coverPreviewWrap = document.getElementById("cover-preview-wrap");
-const coverPreviewImg = document.getElementById("cover-preview");
-const coverRemoveBtn = document.getElementById("cover-remove");
-
-let uploadedCoverBase64 = null;
-
-
-
-function showCoverPreview(src) {
-
-    if (!coverPreviewWrap) return;
-
-    if (coverPreviewImg) {
-        coverPreviewImg.src = src;
-    }
-
-    coverPreviewWrap.style.display = "block";
-
-}
-
-
-
-function hideCoverPreview() {
-
-    if (!coverPreviewWrap) return;
-
-    coverPreviewWrap.style.display = "none";
-
-    if (coverPreviewImg) {
-        coverPreviewImg.src = "";
-    }
-
-}
-
-
-
-if (coverUploadInput) {
-
-    coverUploadInput.addEventListener("change", function () {
-
-        const file = coverUploadInput.files[0];
-
-        if (!file) return;
-
-        const reader = new FileReader();
-
-        reader.onload = function (e) {
-
-            uploadedCoverBase64 = e.target.result;
-
-            if (coverUrlInput) {
-                coverUrlInput.value = "";
-            }
-
-            showCoverPreview(uploadedCoverBase64);
-
-        };
-
-        reader.readAsDataURL(file);
-
-    });
-
-}
-
-
-
-if (coverUrlInput) {
-
-    coverUrlInput.addEventListener("input", function () {
-
-        if (coverUrlInput.value.trim()) {
-
-            uploadedCoverBase64 = null;
-
-            if (coverUploadInput) {
-                coverUploadInput.value = "";
-            }
-
-            showCoverPreview(coverUrlInput.value.trim());
-
-        } else if (!uploadedCoverBase64) {
-
-            hideCoverPreview();
-
-        }
-
-    });
-
-}
-
-
-
-if (coverRemoveBtn) {
-
-    coverRemoveBtn.addEventListener("click", function () {
-
-        uploadedCoverBase64 = null;
-
-        if (coverUrlInput) {
-            coverUrlInput.value = "";
-        }
-
-        if (coverUploadInput) {
-            coverUploadInput.value = "";
-        }
-
-        hideCoverPreview();
-
-    });
-
-}
-
-
-
-// =====================================================================
-// 31. RICH TEXT EDITOR
-// =====================================================================
-
-const richEditor = document.getElementById("content");
-
-
-if (richEditor) {
-
-    let savedRange = null;
-
-
-    function saveSelection() {
-
-        const sel = window.getSelection();
-
-        if (sel.rangeCount > 0 && richEditor.contains(sel.anchorNode)) {
-            savedRange = sel.getRangeAt(0);
-        }
-
-    }
-
-
-    function restoreSelection() {
-
-        if (!savedRange) return;
-
-        const sel = window.getSelection();
-
-        sel.removeAllRanges();
-
-        sel.addRange(savedRange);
-
-    }
-
-
-    function updateToolbarState() {
-
-        document
-            .querySelectorAll(".editor-toolbar-top button[data-cmd]")
-            .forEach(function (btn) {
-
-                btn.classList.toggle(
-                    "active-cmd",
-                    document.queryCommandState(btn.dataset.cmd)
-                );
-
-            });
-
-    }
-
-
-    richEditor.addEventListener("mouseup", function () {
-        saveSelection();
-        updateToolbarState();
-    });
-
-    richEditor.addEventListener("keyup", function () {
-        saveSelection();
-        updateToolbarState();
-    });
-
-    richEditor.addEventListener("focus", saveSelection);
-
-
-    document
-        .querySelectorAll(".editor-toolbar-top button[data-cmd]")
-        .forEach(function (btn) {
-
-            btn.addEventListener("click", function () {
-
-                richEditor.focus();
-
-                restoreSelection();
-
-                document.execCommand(btn.dataset.cmd, false, null);
-
-                saveSelection();
-
-                updateToolbarState();
-
-            });
-
-        });
-
-
-    const fontFamilySelect = document.getElementById("font-family-select");
-    const fontSizeSelect = document.getElementById("font-size-select");
-
-
-    if (fontFamilySelect) {
-
-        fontFamilySelect.addEventListener("change", function () {
-
-            richEditor.focus();
-
-            restoreSelection();
-
-            document.execCommand("fontName", false, fontFamilySelect.value);
-
-            saveSelection();
-
-        });
-
-    }
-
-
-    if (fontSizeSelect) {
-
-        fontSizeSelect.addEventListener("change", function () {
-
-            richEditor.focus();
-
-            restoreSelection();
-
-            document.execCommand("fontSize", false, fontSizeSelect.value);
-
-            saveSelection();
-
-        });
-
-    }
-
-}
-
-
-
-// =====================================================================
-// 32. CREATE BLOG FORM
+// 30. CREATE / EDIT POST (create-blog.html)
+// New posts are sent to the backend (POST /api/blogs). A copy is also kept
+// in localStorage so Home, Dashboard and Blog detail keep working.
+// Editing an existing post only changes the browser copy for now.
 // =====================================================================
 
 const createBlogForm = document.getElementById("create-blog-form");
@@ -2214,115 +1970,206 @@ const createBlogForm = document.getElementById("create-blog-form");
 
 if (createBlogForm) {
 
-    initBgSlideshow("create-bg-slideshow");
+    const MAX_IMAGE_BYTES = 1024 * 1024;
 
+    const titleEl = document.getElementById("blog-title");
+    const categoryEl = document.getElementById("blog-category");
+    const statusEl = document.getElementById("np-status");
+    const editorEl = document.getElementById("np-editor-content");
+    const imageUrlEl = document.getElementById("blog-image");
+    const imageFileEl = document.getElementById("np-image-file");
+    const publishBtn = document.getElementById("np-publish-btn");
+    const publishLabel = document.getElementById("np-publish-label");
+
+    // Edit mode: dashboard links to create-blog.html?id=... (or ?edit=...)
     const params = new URLSearchParams(window.location.search);
+    const editId = params.get("edit") || params.get("id");
 
-    const editId = params.get("edit");
-
-    const pageTitle = document.getElementById("form-page-title");
-
-    const submitBtn = document.getElementById("form-submit-btn");
-
+    let editingPost = null;
 
     if (editId) {
 
-        const existing = getBlogs().find(function (b) {
-            return b.id === editId;
-        });
+        editingPost = getBlogs().find(function (b) {
+            return String(b.id) === String(editId);
+        }) || null;
 
-        if (existing) {
+    }
 
-            const titleInput = document.getElementById("title");
-            const categoryInput = document.getElementById("category");
 
-            if (titleInput) titleInput.value = existing.title;
+    function resetPublishButton() {
 
-            if (categoryInput) categoryInput.value = existing.category;
+        if (publishBtn) publishBtn.disabled = false;
 
-            if (richEditor) richEditor.innerHTML = existing.content;
-
-            if (existing.coverImage) {
-
-                if (existing.coverImage.indexOf("data:") === 0) {
-
-                    uploadedCoverBase64 = existing.coverImage;
-
-                } else if (coverUrlInput) {
-
-                    coverUrlInput.value = existing.coverImage;
-
-                }
-
-                showCoverPreview(existing.coverImage);
-
-            }
-
-            if (pageTitle) pageTitle.innerText = "Edit your post";
-
-            if (submitBtn) submitBtn.innerText = "Save changes";
-
+        if (publishLabel) {
+            publishLabel.textContent =
+                editingPost ? "Save changes" : "Publish Post";
         }
 
     }
 
 
-    createBlogForm.addEventListener("submit", function (e) {
+    function readFileAsDataUrl(file) {
 
-        e.preventDefault();
+        return new Promise(function (resolve, reject) {
 
-        const title = document.getElementById("title").value;
+            const reader = new FileReader();
 
-        const category = document.getElementById("category").value || "General";
+            reader.onload = function () {
+                resolve(reader.result);
+            };
 
-        const content = richEditor ? richEditor.innerHTML : "";
+            reader.onerror = function () {
+                reject(new Error("Could not read the image."));
+            };
 
-        if (!stripHtml(content).trim()) {
+            reader.readAsDataURL(file);
 
-            showToast("Please write some content before publishing.", "error");
+        });
 
+    }
+
+
+    // Fill the form after the page script has finished loading
+    document.addEventListener("DOMContentLoaded", function () {
+
+        if (editId && !editingPost) {
+            showToast("That post could not be found.", "error");
             return;
+        }
+
+        if (!editingPost) return;
+
+        titleEl.value = editingPost.title || "";
+        categoryEl.value = editingPost.category || "";
+
+        if (statusEl) {
+            statusEl.value =
+                editingPost.status === "Published" ? "Published" : "Draft";
+        }
+
+        editorEl.innerHTML = editingPost.content || "";
+
+        const cover = editingPost.coverImage || "";
+
+        if (cover && cover.indexOf("data:") !== 0 && imageUrlEl) {
+
+            imageUrlEl.value = cover;
+
+            const urlWrap = document.getElementById("np-url-wrap");
+
+            if (urlWrap) urlWrap.classList.add("visible");
+
+            imageUrlEl.dispatchEvent(new Event("input"));
 
         }
 
-        const coverImage =
-            uploadedCoverBase64 ||
-            (coverUrlInput && coverUrlInput.value.trim()) ||
-            null;
+        titleEl.dispatchEvent(new Event("input"));
+        categoryEl.dispatchEvent(new Event("change"));
+        editorEl.dispatchEvent(new Event("input"));
 
-        const email =
-            localStorage.getItem("userEmail") || "guest@example.com";
+        const heading = document.querySelector(".np-heading h1");
 
-        let blogs = getBlogs();
+        if (heading) heading.textContent = "Edit your post";
 
-        if (editId) {
+        resetPublishButton();
 
-            blogs = blogs.map(function (b) {
+    });
 
-                if (b.id === editId) {
 
-                    return Object.assign({}, b, {
-                        title: title,
-                        category: category,
-                        content: content,
-                        coverImage: coverImage || b.coverImage || null
-                    });
+    createBlogForm.addEventListener("submit", async function (e) {
 
-                }
+        e.preventDefault();
 
-                return b;
+        const title = titleEl.value.trim();
+        const category = categoryEl.value;
+        const status =
+            statusEl && statusEl.value === "Published" ? "Published" : "Draft";
+        const content = editorEl.innerHTML.trim();
 
+        // The page itself already shows an alert when these are missing
+        if (!title || !category || !stripHtml(content).trim()) {
+            resetPublishButton();
+            return;
+        }
+
+        const email = localStorage.getItem("userEmail") || "";
+
+        if (!email) {
+            showToast("Please log in first.", "error");
+            resetPublishButton();
+            return;
+        }
+
+        if (publishBtn) publishBtn.disabled = true;
+
+        // ---- cover image: uploaded file, image URL, or the old saved image ----
+        let coverImage = null;
+
+        const file =
+            imageFileEl && imageFileEl.files ? imageFileEl.files[0] : null;
+
+        const imageUrl = imageUrlEl ? imageUrlEl.value.trim() : "";
+
+        if (file) {
+
+            if (file.size > MAX_IMAGE_BYTES) {
+                showToast(
+                    "Image is too big (max 1 MB). Use a smaller image or an image URL.",
+                    "error"
+                );
+                resetPublishButton();
+                return;
+            }
+
+            try {
+                coverImage = await readFileAsDataUrl(file);
+            } catch (error) {
+                showToast("Could not read the image.", "error");
+                resetPublishButton();
+                return;
+            }
+
+        } else if (imageUrl) {
+
+            coverImage = imageUrl;
+
+        } else if (
+            editingPost &&
+            editingPost.coverImage &&
+            editingPost.coverImage.indexOf("data:") === 0
+        ) {
+
+            coverImage = editingPost.coverImage;
+
+        }
+
+        // ---- save ----
+        if (!editingPost) {
+
+            const result = await apiPost("/api/blogs", {
+                title: title,
+                category: category,
+                status: status,
+                content: content,
+                image: coverImage || "",
+                authorEmail: email
             });
 
-            saveBlogs(blogs);
+            if (!result.ok) {
+                showToast(
+                    result.data.message ||
+                    "Could not save the post. Please try again.",
+                    "error"
+                );
+                resetPublishButton();
+                return;
+            }
 
-            showToast("Post updated!", "success");
-
-        } else {
+            const saved = result.data.blog || {};
+            const blogs = getBlogs();
 
             blogs.push({
-
-                id: getNextId(blogs),
+                id: String(saved.id || getNextId(blogs)),
                 title: title,
                 category: category,
                 content: content,
@@ -2333,14 +2180,60 @@ if (createBlogForm) {
                     year: "numeric"
                 }),
                 views: 0,
-                status: "Published",
+                status: status,
                 authorEmail: email
+            });
+
+            try {
+                saveBlogs(blogs);
+            } catch (error) {
+                showToast(
+                    "This browser has no space left. Use a smaller image.",
+                    "error"
+                );
+                resetPublishButton();
+                return;
+            }
+
+            showToast(
+                status === "Published"
+                    ? "Post published successfully!"
+                    : "Draft saved!",
+                "success"
+            );
+
+        } else {
+
+            const blogs = getBlogs().map(function (b) {
+
+                if (String(b.id) === String(editingPost.id)) {
+
+                    return Object.assign({}, b, {
+                        title: title,
+                        category: category,
+                        status: status,
+                        content: content,
+                        coverImage: coverImage
+                    });
+
+                }
+
+                return b;
 
             });
 
-            saveBlogs(blogs);
+            try {
+                saveBlogs(blogs);
+            } catch (error) {
+                showToast(
+                    "This browser has no space left. Use a smaller image.",
+                    "error"
+                );
+                resetPublishButton();
+                return;
+            }
 
-            showToast("Post published successfully!", "success");
+            showToast("Post updated!", "success");
 
         }
 
@@ -2355,7 +2248,7 @@ if (createBlogForm) {
 
 
 // =====================================================================
-// 33. BLOG DETAIL
+// 31. BLOG DETAIL
 // =====================================================================
 
 const detailContainer = document.getElementById("blog-detail-container");
